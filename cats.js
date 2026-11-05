@@ -365,7 +365,7 @@ const CATS = [
 // Walking pose (crouched chibi trot, facing left): big v2 head low at the front, short round body behind it,
 // stubby legs with mitten paws, thick raised tail. Held items, neck items and ground props are hidden.
 const LEG_F = 'M-10 -4 C-11 6 -10 10 -10 13 C-22 14 -26 26 -19 30 C-9 33 10 33 13 28 C15 22 11 16 9 13 C11 8 11 2 10 -4';
-const LEG_B = 'M-12 -6 C-14 6 -10 13 -8 17 C-15 19 -17 27 -11 29 C-4 31 8 31 10 27 C12 23 10 20 8 17 C12 9 15 2 12 -6';
+const LEG_B = 'M-14 -10 C-18 4 -15 15 -10 21 C-17 23 -21 30 -15 33 C-6 36 9 36 12 32 C14 28 12 23 9 21 C15 12 17 0 14 -10';
 const TORSO = 'M118 170 C128 150 158 138 186 140 C210 142 220 160 218 184 C216 206 204 224 182 228 C158 232 130 232 114 222 C102 212 106 186 118 170 Z';
 const WTAIL = 'M198 168 C214 148 218 116 210 96 C204 80 190 74 178 80 C168 86 172 100 182 97 C190 94 196 102 196 114 C196 134 188 152 180 162 Z';
 const TORSO_ITEMS = new Set(['gato-sushi', 'gato-zombi', 'gato-astronauta', 'gato-dragon', 'gato-bombero', 'gato-detective', 'gato-calabaza', 'gato-robot', 'gato-rayo', 'gato-caballero']);
@@ -373,11 +373,13 @@ function buildWalk(c, uid = '') {
   const L = buildCat(c, uid), id = c.id + uid, p = c.colors, a = c.acc || {}, light = mix(p.fur, '#FFFFFF', .5);
   const A = k => sh((c.shift || {})[k], a[k]) || a[k] || '';
   const near = c.bodyFill || p.fur, far = c.bodyShade || p.shade;
-  const leg = (cls, x, y, d, fill, toes) => `<g transform="translate(${x} ${y})"><g class="w-leg ${cls}"><path d="${d}Z" fill="${fill}"/><path d="${d}" fill="none" stroke="${O}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>` +
-    (toes ? `<path d="M-12 26 q1 3 0 5 M-5 26 q1 3 0 5" stroke="${O}" stroke-width="2.2" fill="none" stroke-linecap="round"/>` : '') + '</g></g>';
+  const leg = (cls, x, y, d, fill, back) => { const ty = back ? 29 : 26, lx = back ? -9 : -12;
+    return `<g transform="translate(${x} ${y})"><g class="w-leg ${cls}"><path d="${d}Z" ${st(fill, 4)}/>
+      <path d="M${lx - 3} ${ty - 2} q5 -4 11 -2" stroke="#FFFFFF" stroke-width="2.5" fill="none" stroke-linecap="round" opacity=".45"/>
+      <path d="M${lx} ${ty} q1.5 3 0 5.5 M${lx + 7} ${ty} q1.5 3 0 5.5" stroke="${O}" stroke-width="2.2" fill="none" stroke-linecap="round"/></g></g>`; };
   return `<defs><clipPath id="${id}-tc"><path d="${TORSO}"/></clipPath></defs>
     <g transform="translate(130 240)"><g class="w-shadow"><path transform="translate(-130 -240)" d="M44 240 C74 233 190 231 222 238 C226 245 192 249 130 249 C74 249 40 247 44 240 Z" fill="${O}" opacity=".25"/></g></g>
-    ${leg('w-fb', 204, 210, LEG_B, far)}
+    ${leg('w-fb', 200, 204, LEG_B, far, 1)}${leg('w-nb', 186, 205, LEG_B, near, 1)}
     <g class="w-body">
       <g transform="translate(95 80) scale(.55)">${A('back')}</g>
       <g transform="translate(194 162)"><g class="w-tail"><g transform="translate(-194 -162)"><path d="${WTAIL}" ${st(p.fur, 4.5)}/>
@@ -388,10 +390,10 @@ function buildWalk(c, uid = '') {
         <path d="M196 146 C222 156 230 186 212 216 C224 188 218 164 196 146 Z" fill="${far}"/>
         ${TORSO_ITEMS.has(c.id) ? `<g transform="translate(95 80) scale(.55)">${A('body')}${A('bodyTop')}</g>` : ''}
       </g>
+      <path d="M200 174 C184 180 176 200 180 224" stroke="${O}" stroke-width="3.5" fill="none" stroke-linecap="round"/><path d="M196 182 C186 190 183 204 185 214" stroke="#FFFFFF" stroke-width="3" fill="none" stroke-linecap="round" opacity=".3"/>
       <path d="${TORSO}" fill="none" stroke="${O}" stroke-width="4.5" stroke-linejoin="round"/>
     </g>
-    ${leg('w-nb', 184, 212, LEG_B, near, true)}
-    ${leg('w-ff', 134, 206, LEG_F, far, true)}${leg('w-nf', 80, 206, LEG_F, near, true)}
+    ${leg('w-ff', 134, 206, LEG_F, far)}${leg('w-nf', 80, 206, LEG_F, near)}
     <g class="w-body">
       ${c.collar === false ? '' : bell(124, 226, 8)}
       <g transform="translate(98 222)"><g class="w-head"><g transform="translate(-100 -122) scale(.78 .86)">${L.head}${L.face}</g></g></g>
