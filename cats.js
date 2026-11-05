@@ -362,42 +362,41 @@ const CATS = [
     } },
 ];
 
-const LEG_F = 'M-10 -4 C-12 10 -10 24 -9 33 C-15 36 -17 44 -11 46 C-4 48 7 48 10 45 C12 41 10 36 8 33 C10 22 12 8 10 -4';
-const LEG_B = 'M-14 -6 C-16 10 -10 22 -8 32 C-14 36 -16 44 -10 46 C-3 48 8 48 10 45 C12 41 10 36 8 32 C12 22 18 8 14 -6';
-const TORSO = 'M112 158 C126 146 150 142 172 144 C196 146 214 152 222 168 C230 184 224 204 210 212 C196 218 178 214 162 216 C146 218 130 220 118 214 C104 206 100 176 112 158 Z';
-const WTAIL = 'M218 164 C238 140 240 108 222 92 C210 82 192 86 188 98 C185 107 196 112 200 104 C206 96 216 100 220 110 C226 126 218 146 204 162 Z';
+// Walking pose (crouched chibi trot, facing left): big v2 head low at the front, short round body behind it,
+// stubby legs with mitten paws, thick raised tail. Held items, neck items and ground props are hidden.
+const LEG_F = 'M-10 -4 C-11 6 -10 10 -10 13 C-22 14 -26 26 -19 30 C-9 33 10 33 13 28 C15 22 11 16 9 13 C11 8 11 2 10 -4';
+const LEG_B = 'M-12 -6 C-14 6 -10 13 -8 17 C-15 19 -17 27 -11 29 C-4 31 8 31 10 27 C12 23 10 20 8 17 C12 9 15 2 12 -6';
+const TORSO = 'M118 170 C128 150 158 138 186 140 C210 142 220 160 218 184 C216 206 204 224 182 228 C158 232 130 232 114 222 C102 212 106 186 118 170 Z';
+const WTAIL = 'M198 168 C214 148 218 116 210 96 C204 80 190 74 178 80 C168 86 172 100 182 97 C190 94 196 102 196 114 C196 134 188 152 180 162 Z';
 const TORSO_ITEMS = new Set(['gato-sushi', 'gato-zombi', 'gato-astronauta', 'gato-dragon', 'gato-bombero', 'gato-detective', 'gato-calabaza', 'gato-robot', 'gato-rayo', 'gato-caballero']);
-// Walking pose (side view, facing left): v2 head on top of an animated 4-legged body. Held items and ground props are hidden.
 function buildWalk(c, uid = '') {
   const L = buildCat(c, uid), id = c.id + uid, p = c.colors, a = c.acc || {}, light = mix(p.fur, '#FFFFFF', .5);
   const A = k => sh((c.shift || {})[k], a[k]) || a[k] || '';
   const near = c.bodyFill || p.fur, far = c.bodyShade || p.shade;
-  const leg = (cls, x, y, d, fill, front) => `<g transform="translate(${x} ${y})"><g class="w-leg ${cls}"><path d="${d}Z" fill="${fill}"/><path d="${d}" fill="none" stroke="${O}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>` +
-    (front ? `<path d="M-7 41 l1 4 M-2 41 l1 5" stroke="${O}" stroke-width="2.5" stroke-linecap="round"/><path d="M-9 46 c3 -2 9 -2 12 0" stroke="#F6DCD3" stroke-width="2" fill="none"/>` : '') + '</g></g>';
-  const torsoItems = TORSO_ITEMS.has(c.id);
+  const leg = (cls, x, y, d, fill, toes) => `<g transform="translate(${x} ${y})"><g class="w-leg ${cls}"><path d="${d}Z" fill="${fill}"/><path d="${d}" fill="none" stroke="${O}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>` +
+    (toes ? `<path d="M-12 26 q1 3 0 5 M-5 26 q1 3 0 5" stroke="${O}" stroke-width="2.2" fill="none" stroke-linecap="round"/>` : '') + '</g></g>';
   return `<defs><clipPath id="${id}-tc"><path d="${TORSO}"/></clipPath></defs>
-    <g transform="translate(128 240)"><g class="w-shadow"><path transform="translate(-128 -240)" d="M40 240 C70 232 190 230 228 238 C233 245 196 249 128 249 C70 249 35 247 40 240 Z" fill="${O}" opacity=".25"/></g></g>
-    ${leg('w-fb', 208, 189, LEG_B, far)}${leg('w-ff', 134, 189, LEG_F, far)}
+    <g transform="translate(130 240)"><g class="w-shadow"><path transform="translate(-130 -240)" d="M44 240 C74 233 190 231 222 238 C226 245 192 249 130 249 C74 249 40 247 44 240 Z" fill="${O}" opacity=".25"/></g></g>
+    ${leg('w-fb', 204, 210, LEG_B, far)}
     <g class="w-body">
-      <g transform="translate(92 84) scale(.62)">${A('back')}</g>
-      <g transform="translate(210 162)"><g class="w-tail"><g transform="translate(-210 -162)"><path d="${WTAIL}" ${st(p.fur, 4.5)}/>
-        <g fill="${light}"><path d="M193 95 c3 -2 6 0 5 3 c-1 3 -6 2 -5 -3z"/><path d="M201 89 c2 -2 5 -1 4 2 c-1 2 -4 2 -4 -2z"/></g></g></g></g>
+      <g transform="translate(95 80) scale(.55)">${A('back')}</g>
+      <g transform="translate(194 162)"><g class="w-tail"><g transform="translate(-194 -162)"><path d="${WTAIL}" ${st(p.fur, 4.5)}/>
+        <g fill="${light}"><path d="M185 88 c3 -2 6 0 5 3 c-1 3 -6 2 -5 -3z"/><path d="M194 86 c2 -2 5 -1 4 2 c-1 2 -4 2 -4 -2z"/></g></g></g></g>
       <path d="${TORSO}" fill="${near}"/>
       <g clip-path="url(#${id}-tc)">
-        ${c.bodyFill ? '' : `<path d="M100 194 C126 204 168 206 232 196 L232 232 L100 232 Z" fill="${p.belly}"/>`}
-        <path d="M196 148 C222 156 234 184 216 212 C228 186 220 162 196 148 Z" fill="${far}"/>
-        <path d="M108 186 C124 196 146 200 164 194 C162 206 132 212 110 204 Z" fill="${far}" opacity=".4"/>
-        ${torsoItems ? `<g transform="translate(92 84) scale(.62)">${A('body')}${A('bodyTop')}</g>` : ''}
+        ${c.bodyFill ? '' : `<path d="M104 204 C130 214 170 216 226 206 L226 236 L104 236 Z" fill="${p.belly}"/>`}
+        <path d="M196 146 C222 156 230 186 212 216 C224 188 218 164 196 146 Z" fill="${far}"/>
+        ${TORSO_ITEMS.has(c.id) ? `<g transform="translate(95 80) scale(.55)">${A('body')}${A('bodyTop')}</g>` : ''}
       </g>
       <path d="${TORSO}" fill="none" stroke="${O}" stroke-width="4.5" stroke-linejoin="round"/>
     </g>
-    ${leg('w-nb', 192, 191, LEG_B, near)}${leg('w-nf', 118, 191, LEG_F, near, true)}
+    ${leg('w-nb', 184, 212, LEG_B, near, true)}
+    ${leg('w-ff', 134, 206, LEG_F, far, true)}${leg('w-nf', 80, 206, LEG_F, near, true)}
     <g class="w-body">
-      ${c.collar === false ? '' : `<path d="M76 198 Q100 214 126 200" stroke="${O}" stroke-width="12" fill="none" stroke-linecap="round"/><path d="M76 198 Q100 214 126 200" stroke="${p.accent}" stroke-width="6" fill="none" stroke-linecap="round"/>`}
-      ${torsoItems ? '' : `<g transform="translate(4 98) scale(.74)">${A('body')}${A('bodyTop')}</g>`}
-      <g transform="translate(98 200)"><g class="w-head"><g transform="translate(-94 -102) scale(.74)">${L.head}${L.face}</g></g></g>
-      ${c.collar === false ? '' : bell(98, 214, 11)}
-    </g>`;
+      ${c.collar === false ? '' : bell(124, 226, 8)}
+      <g transform="translate(98 222)"><g class="w-head"><g transform="translate(-100 -122) scale(.78 .86)">${L.head}${L.face}</g></g></g>
+    </g>
+`;
 }
 
 if (typeof module !== 'undefined') module.exports = { CATS, buildCat, buildWalk };
