@@ -77,8 +77,8 @@
   header { text-align: center; }
   .tabs { display: inline-flex; gap: 6px; background: var(--card); padding: 5px; border-radius: 999px; margin: 8px 16px 18px; }
   .tabs button { border: 0; background: transparent; color: var(--muted); font: 700 1rem system-ui, sans-serif; padding: 9px 20px; border-radius: 999px; cursor: pointer; }
-  .tabs button.on { background: #E84A5F; color: #fff; }
-  .tabs span { font-weight: 500; opacity: .85; font-size: .85rem; }
+  .tabs button.on { background: #C9354A; color: #fff; }
+  .tabs span { font-weight: 500; font-size: .85rem; }
   /* ---- machine ---- */
   .tab[hidden] { display: none !important; }
   #gacha { display: flex; flex-direction: column; align-items: center; padding: 0 16px 32px; }
@@ -89,8 +89,8 @@
   .pull-btns { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; margin-top: 18px; }
   .pull { border: 4px solid #1A161F; background: #F5B83D; color: #1A161F; font: 900 1.15rem system-ui, sans-serif; padding: 10px 26px; border-radius: 16px; cursor: pointer;
     box-shadow: 0 6px 0 #1A161F; display: flex; flex-direction: column; align-items: center; line-height: 1.1; }
-  .pull small { font-size: .75rem; font-weight: 700; opacity: .75; }
-  .pull.ten { background: #E84A5F; color: #fff; }
+  .pull small { font-size: .75rem; font-weight: 700; }
+  .pull.ten { background: #C9354A; color: #fff; }
   .pull:active:not(:disabled) { transform: translateY(4px); box-shadow: 0 2px 0 #1A161F; }
   .pull:disabled { filter: grayscale(.7) brightness(.7); cursor: default; }
   .rates { color: var(--muted); font-size: .8rem; text-align: center; max-width: 520px; }
@@ -121,10 +121,9 @@
   @keyframes rays { to { rotate: 360deg; } }
   .mini h3 { margin: 4px 0 0; font-size: .95rem; text-align: center; }
   .mini .cat { width: 92%; }
-  .new { position: absolute; top: 6px; left: 6px; background: #E84A5F; color: #fff; font: 900 .7rem system-ui, sans-serif; padding: 3px 7px; border-radius: 8px; transform: rotate(-8deg); }
+  .new { position: absolute; top: 6px; left: 6px; background: #C9354A; color: #fff; font: 900 .7rem system-ui, sans-serif; padding: 3px 7px; border-radius: 8px; transform: rotate(-8deg); }
   /* ---- collection ---- */
   .card.locked .cat { filter: brightness(0) opacity(.45); }
-  .card.locked .rar { opacity: .5; }
   .count { position: absolute; top: 8px; right: 10px; background: #1A161F; color: #fff; font: 800 .8rem system-ui, sans-serif; padding: 2px 8px; border-radius: 999px; }
   @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; } }
 </style>
