@@ -20,7 +20,7 @@ function buildCat(c) {
     stripes: `<g fill="${p.pattern}"><rect x="110" y="42" width="9" height="20" rx="4.5"/><rect x="123.5" y="38" width="9" height="24" rx="4.5"/><rect x="137" y="42" width="9" height="20" rx="4.5"/><rect x="40" y="96" width="18" height="8" rx="4"/><rect x="198" y="96" width="18" height="8" rx="4"/></g>`,
     scales: `<g fill="${p.pattern}"><path d="M104 56a10 10 0 0 1 20 0z"/><path d="M118 44a10 10 0 0 1 20 0z"/><path d="M132 56a10 10 0 0 1 20 0z"/></g>`,
     patches: `<ellipse cx="164" cy="66" rx="26" ry="18" fill="${p.pattern}"/>`,
-  }[c.pattern || 'stripes'];
+  }[c.pattern || 'stripes'] || '';
   const eye = (x, kind) => kind === 'x'
     ? `<path d="M${x - 8} ${c.eyeY - 8}l16 16M${x + 8} ${c.eyeY - 8}l-16 16" stroke="${O}" stroke-width="4" stroke-linecap="round"/>`
     : kind === 'slit' ? `<ellipse cx="${x}" cy="${c.eyeY}" rx="9" ry="11" ${st(p.eye, 3)}/><ellipse cx="${x}" cy="${c.eyeY}" rx="2.5" ry="9" fill="${O}"/><circle cx="${x + 3}" cy="${c.eyeY - 5}" r="2" fill="#fff"/>`
