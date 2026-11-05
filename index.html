@@ -126,13 +126,79 @@
   /* ---- collection ---- */
   .card.locked .cat { filter: brightness(0) opacity(.45); }
   .count { position: absolute; top: 8px; right: 10px; background: #1A161F; color: #fff; font: 800 .8rem system-ui, sans-serif; padding: 2px 8px; border-radius: 999px; }
+  /* ---- patio ---- */
+  #patio { padding: 0 16px 24px; }
+  .garden { position: relative; max-width: 1100px; height: min(600px, 68vh); margin: auto; border: 5px solid #1A161F; border-radius: 22px; overflow: hidden;
+    background: repeating-linear-gradient(100deg, #8FD27A 0 40px, #86CB71 40px 80px); }
+  .sky { position: absolute; inset: 0 0 auto; height: 28%; background: linear-gradient(#9FDBFF, #CDEFFF); }
+  .sun { position: absolute; right: 8%; top: 18%; width: 56px; height: 56px; border-radius: 50%; background: #FFD54F; border: 4px solid #1A161F; }
+  .cloud { position: absolute; height: 26px; width: 90px; border-radius: 999px; background: #fff; border: 4px solid #1A161F; animation: drift 40s linear infinite; }
+  .c1 { top: 22%; left: -20%; } .c2 { top: 48%; left: -20%; width: 60px; animation-delay: -18s; animation-duration: 55s; }
+  @keyframes drift { to { left: 110%; } }
+  .fence { position: absolute; left: 0; right: 0; top: 18%; height: 13%; border-bottom: 5px solid #1A161F;
+    background: linear-gradient(transparent 30%, #E8C99B 30% 44%, transparent 44% 70%, #E8C99B 70% 84%, transparent 84%),
+      repeating-linear-gradient(90deg, #F4DDB4 0 26px, #1A161F 26px 30px, transparent 30px 44px, #1A161F 44px 48px); }
+  .deco { position: absolute; inset: 0; width: 100%; height: 100%; }
+  #pets { position: absolute; inset: 0; }
+  .pet { position: absolute; left: 0; top: 0; width: 110px; transform-origin: 50% 100%; cursor: pointer; }
+  .pet .cat { width: 100%; margin: 0; }
+  .pet .tilt { transition: transform .35s ease-out; }
+  .pet-body { transform-origin: 50% 95%; }
+  .pet.walk .pet-body { animation: hop .32s ease-in-out infinite alternate; }
+  @keyframes hop { from { translate: 0 0; rotate: -3deg; } to { translate: 0 -7%; rotate: 3deg; } }
+  .pet.g-loaf .pet-body { scale: 1.08 .86; transition: scale .4s; }
+  .pet.g-sleep .pet-body { scale: 1.1 .8; transition: scale .6s; }
+  .pet.g-stretch .pet-body { animation: stretch 1.4s ease-in-out; }
+  @keyframes stretch { 40%, 60% { scale: 1.25 .78; } }
+  .pet.g-jump .pet-body, .pet.i-play .pet-body { animation: jump .6s cubic-bezier(.3, 0, .6, 1) 2; }
+  @keyframes jump { 50% { translate: 0 -45%; scale: .95 1.05; } }
+  .pet.g-spin .tilt { animation: spin3d 1s ease-in-out 2; }
+  @keyframes spin3d { to { transform: rotateY(360deg); } }
+  .pet.g-groom .pet-body { animation: groom .35s ease-in-out infinite alternate; }
+  @keyframes groom { from { rotate: -10deg; } to { rotate: 6deg; } }
+  .pet.i-hello .pet-body { animation: lean .7s ease-in-out 2 alternate; }
+  @keyframes lean { to { translate: calc(var(--dir) * 12%) 0; rotate: calc(var(--dir) * 8deg); } }
+  .pet.hide { opacity: 0; transition: opacity .15s; }
+  .bubble { position: absolute; left: 50%; bottom: 92%; translate: -50% 0; background: #fff; color: #1A161F; border: 3px solid #1A161F; border-radius: 14px;
+    padding: 2px 10px; font: 800 .85rem system-ui, sans-serif; white-space: nowrap; pointer-events: none; animation: pop 1.8s ease-out forwards; }
+  @keyframes pop { 0% { scale: 0; } 12% { scale: 1.15; } 20%, 80% { scale: 1; opacity: 1; } 100% { translate: -50% -20px; opacity: 0; } }
+  .fight { position: absolute; width: 170px; height: 130px; translate: -50% -75%; pointer-events: none; }
+  .fight i { position: absolute; border-radius: 50%; background: #F4EFE6; border: 4px solid #1A161F; animation: brawl .25s ease-in-out infinite alternate; }
+  .fight i:nth-child(1) { inset: 20% 30% 25% 5%; } .fight i:nth-child(2) { inset: 10% 8% 30% 35%; animation-delay: -.1s; } .fight i:nth-child(3) { inset: 40% 20% 5% 25%; animation-delay: -.18s; }
+  @keyframes brawl { to { transform: scale(1.12) rotate(14deg); } }
+  .fight b { position: absolute; font-size: 1.5rem; animation: fly .5s ease-out infinite; }
+  .fight b:nth-of-type(1) { left: 0; top: 0; } .fight b:nth-of-type(2) { right: 0; top: 10%; animation-delay: -.2s; } .fight b:nth-of-type(3) { left: 40%; top: -15%; animation-delay: -.35s; } .fight b:nth-of-type(4) { right: 10%; bottom: 0; animation-delay: -.1s; }
+  @keyframes fly { from { transform: scale(.4); opacity: 1; } to { transform: scale(1.3) translateY(-12px); opacity: 0; } }
+  .hearts { position: absolute; translate: -50% -100%; font-size: 1.4rem; pointer-events: none; animation: pop 1.6s ease-out forwards; }
+  .empty { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 12px; text-align: center; color: #1A161F; font-weight: 800; }
+  .empty p { background: #FFF6ECee; border: 4px solid #1A161F; border-radius: 18px; padding: 14px 20px; margin: 0; }
+  .empty[hidden] { display: none; }
   @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; } }
 </style>
 </head>
 <body>
 <header><h1>🐾 Meaw Meaw</h1>
-<nav class="tabs"><button data-tab="gacha" class="on">Gacha</button><button data-tab="coleccion">Colección <span id="owned"></span></button></nav></header>
-<section id="gacha" class="tab">
+<nav class="tabs"><button data-tab="patio" class="on">Patio</button><button data-tab="gacha">Gacha</button><button data-tab="coleccion">Colección <span id="owned"></span></button></nav></header>
+<section id="patio" class="tab">
+  <div class="garden" id="garden">
+    <div class="sky"><span class="sun"></span><span class="cloud c1"></span><span class="cloud c2"></span></div>
+    <div class="fence"></div>
+    <svg class="deco" viewBox="0 0 1000 600" preserveAspectRatio="none" aria-hidden="true">
+      <g stroke="#1A161F" stroke-width="5" stroke-linejoin="round">
+        <rect x="70" y="60" width="36" height="140" rx="8" fill="#8A5A3B"/><circle cx="60" cy="70" r="56" fill="#5DB86A"/><circle cx="120" cy="50" r="50" fill="#6CC979"/><circle cx="96" cy="110" r="46" fill="#4FA85D"/>
+        <ellipse cx="880" cy="190" rx="90" ry="44" fill="#5DB86A"/><ellipse cx="960" cy="200" rx="60" ry="36" fill="#4FA85D"/>
+      </g>
+      <g stroke="#1A161F" stroke-width="3">
+        <circle cx="300" cy="230" r="9" fill="#FF8FA3"/><circle cx="330" cy="250" r="8" fill="#FFE27A"/><circle cx="700" cy="560" r="10" fill="#9FC9F2"/><circle cx="730" cy="575" r="8" fill="#FF8FA3"/>
+        <circle cx="150" cy="520" r="9" fill="#FFE27A"/><circle cx="560" cy="250" r="8" fill="#C9A0FF"/><circle cx="930" cy="430" r="9" fill="#FF8FA3"/>
+      </g>
+    </svg>
+    <div id="pets"></div>
+    <div class="empty" id="empty"><p>Tu patio está vacío… 🌱<br>¡Consigue gatitos en la máquina gacha y vendrán a vivir aquí!</p><button class="pull" id="goGacha">Ir al gacha</button></div>
+  </div>
+  <p class="sub">Toca un gatito para saludarlo.</p>
+</section>
+<section id="gacha" class="tab" hidden>
   <div class="machine-wrap" id="wrap">
     <svg class="machine" id="machine" viewBox="0 0 300 440" aria-label="Máquina gashapon">
       <defs><clipPath id="domeClip"><circle cx="150" cy="140" r="102"/></clipPath></defs>
@@ -228,6 +294,7 @@ function renderCollection() {
       <p class="bio">${n ? c.bio : 'Aún no lo tienes.'}</p>${n > 1 ? `<span class="count">×${n}</span>` : ''}</article>`;
   }).join('');
   tiltable(grid);
+  syncGarden();
   $('owned').textContent = `${CATS.filter(c => col[c.id]).length}/${CATS.length}`;
 }
 
@@ -306,7 +373,97 @@ document.querySelectorAll('.tabs button').forEach(b => b.onclick = () => {
   document.querySelectorAll('.tabs button').forEach(x => x.classList.toggle('on', x === b));
   document.querySelectorAll('.tab').forEach(t => t.hidden = t.id !== b.dataset.tab);
 });
-renderCollection();
+// ---- patio: owned cats wander, gesture and meet each other ----
+const G = { pets: [], last: 0 };
+const GESTURES = [
+  { cls: 'g-loaf', t: 3000, say: '…' }, { cls: 'g-sleep', t: 4500, say: '💤' }, { cls: 'g-stretch', t: 1400, say: '~nyaa' },
+  { cls: 'g-jump', t: 1200, say: '¡Miau!' }, { cls: 'g-spin', t: 2000, say: '🌀' }, { cls: 'g-groom', t: 2500, say: '✨' }, { cls: 'zoom', t: 0, say: '💨' },
+];
+const rand = (a, b) => a + Math.random() * (b - a);
+const Y0 = .42, Y1 = .97; // walkable band (fraction of garden height)
+function say(pet, text) {
+  const b = document.createElement('div'); b.className = 'bubble'; b.textContent = text;
+  pet.el.append(b); setTimeout(() => b.remove(), 1800);
+}
+function setState(p, state, ms, cls = '') {
+  p.el.classList.remove(p.cls || 'x'); p.el.classList.toggle('walk', state === 'walk');
+  p.state = state; p.timer = ms; p.cls = cls; if (cls) p.el.classList.add(cls);
+}
+function walkTo(p, x, y, speed = rand(.05, .09)) {
+  p.tx = Math.min(.95, Math.max(.05, x)); p.ty = Math.min(Y1, Math.max(Y0, y)); p.speed = speed;
+  setState(p, 'walk', 15000);
+}
+function syncGarden() {
+  const box = $('pets'), have = new Set(G.pets.map(p => p.c.id));
+  for (const c of CATS) if (col[c.id] && !have.has(c.id)) {
+    const el = document.createElement('div'); el.className = 'pet';
+    el.innerHTML = `<div class="pet-body">${catHTML(c)}</div>`;
+    const p = { c, el, x: rand(.1, .9), y: rand(Y0, Y1), dir: 1, cool: 3000 };
+    el.onclick = () => { if (p.state !== 'interact') { setState(p, 'gesture', 1200, 'g-jump'); say(p, '¡Miau! ❤'); } };
+    box.append(el); G.pets.push(p); setState(p, 'idle', rand(300, 2500));
+  }
+  $('empty').hidden = G.pets.length > 0;
+}
+function meet(a, b) {
+  const kind = Math.random() < .4 ? 'fight' : Math.random() < .55 ? 'hello' : 'play';
+  const mx = (a.x + b.x) / 2, my = (a.y + b.y) / 2, gw = $('garden');
+  for (const [p, q] of [[a, b], [b, a]]) { p.dir = Math.sign(q.x - p.x) || 1; p.cool = 9000; }
+  if (kind === 'fight') {
+    const f = document.createElement('div'); f.className = 'fight';
+    f.innerHTML = '<i></i><i></i><i></i><b>💥</b><b>⭐</b><b>💢</b><b>🐾</b>';
+    f.style.left = mx * 100 + '%'; f.style.top = my * 100 + '%'; f.style.zIndex = Math.round(my * 1000) + 1;
+    gw.querySelector('#pets').append(f);
+    for (const p of [a, b]) { setState(p, 'interact', 2200, 'hide'); }
+    setTimeout(() => { f.remove(); for (const p of [a, b]) { walkTo(p, p.x - p.dir * .18, p.y + rand(-.05, .05), .2); say(p, Math.random() < .5 ? '💢' : '¡Fsss!'); } }, 2200);
+  } else if (kind === 'hello') {
+    for (const p of [a, b]) setState(p, 'interact', 1500, 'i-hello');
+    const h = document.createElement('div'); h.className = 'hearts'; h.textContent = '❤️';
+    h.style.left = mx * 100 + '%'; h.style.top = (my - .12) * 100 + '%'; h.style.zIndex = 2000;
+    gw.querySelector('#pets').append(h); setTimeout(() => h.remove(), 1600);
+    say(a, 'miau'); setTimeout(() => say(b, 'miau~'), 400);
+  } else {
+    for (const p of [a, b]) setState(p, 'interact', 1300, 'i-play');
+    say(a, '♪'); say(b, '♪');
+  }
+}
+function tick(now) {
+  const dt = Math.min(100, now - (G.last || now)); G.last = now;
+  const gw = $('garden'), W = gw.clientWidth, H = gw.clientHeight;
+  if (W && H) {
+    for (const p of G.pets) {
+      p.timer -= dt; p.cool -= dt;
+      if (p.state === 'walk') {
+        const dx = p.tx - p.x, dy = p.ty - p.y, d = Math.hypot(dx * W / H, dy), step = p.speed * dt / 1000;
+        if (Math.abs(dx) > .005) p.dir = Math.sign(dx);
+        if (d <= step || p.timer <= 0) setState(p, 'idle', rand(800, 3000));
+        else { p.x += dx / d * step * H / W; p.y += dy / d * step; }
+      } else if (p.timer <= 0) {
+        if (p.state === 'interact' || p.state === 'gesture' || Math.random() < .6) walkTo(p, p.x + rand(-.4, .4), p.y + rand(-.2, .2));
+        else {
+          const g = pick(GESTURES);
+          if (g.cls === 'zoom') walkTo(p, rand(.05, .95), rand(Y0, Y1), .3); else setState(p, 'gesture', g.t, g.cls);
+          say(p, g.say);
+        }
+      }
+      // pseudo-3D: walking cats turn toward where they go; resting cats face the player
+      p.el.querySelector('.tilt').style.setProperty('--ry', `${p.state === 'walk' || p.state === 'interact' ? p.dir * 32 : 0}deg`);
+      p.el.style.setProperty('--dir', p.dir);
+      const s = .55 + .6 * (p.y - Y0) / (Y1 - Y0), size = 110;
+      p.el.style.transform = `translate(${p.x * W - size / 2}px, ${p.y * H - size}px) scale(${s})`;
+      p.el.style.zIndex = Math.round(p.y * 1000);
+    }
+    // head-on meetings: both walking toward each other at about the same depth
+    for (let i = 0; i < G.pets.length; i++) for (let j = i + 1; j < G.pets.length; j++) {
+      const a = G.pets[i], b = G.pets[j];
+      if (a.state !== 'walk' || b.state !== 'walk' || a.cool > 0 || b.cool > 0) continue;
+      const dx = b.x - a.x;
+      if (Math.abs(dx) < .09 && Math.abs(b.y - a.y) < .06 && a.dir === Math.sign(dx) && b.dir === -Math.sign(dx)) meet(a, b);
+    }
+  }
+  requestAnimationFrame(tick);
+}
+renderCollection(); requestAnimationFrame(tick);
+$('goGacha').onclick = () => document.querySelector('.tabs button[data-tab=gacha]').click();
 </script>
 </body>
 </html>
