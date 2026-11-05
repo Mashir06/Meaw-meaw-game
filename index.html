@@ -135,8 +135,25 @@
   .pet .cat { width: 100%; margin: 0; }
   .pet .tilt { transition: transform .35s ease-out; }
   .pet-body { transform-origin: 50% 95%; }
-  .pet.walk .pet-body { animation: hop .32s ease-in-out infinite alternate; }
-  @keyframes hop { from { translate: 0 0; rotate: -3deg; } to { translate: 0 -7%; rotate: 3deg; } }
+  /* walking pose (Base v3): legs, body bob, head nod, tail sway */
+  .walkpose { position: absolute; left: 0; top: 0; width: 100%; height: auto; aspect-ratio: 1; overflow: visible; display: none; }
+  .pet.walk .walkpose { display: block; }
+  .pet.walk .pet-body { visibility: hidden; }
+  .pet.walk .w-leg { animation: w-leg var(--stride, .8s) ease-in-out infinite; }
+  .pet.walk .w-ff, .pet.walk .w-nb { animation-delay: calc(var(--stride, .8s) / -2); }
+  .pet.walk .w-nb, .pet.walk .w-fb { animation-name: w-leg-back; }
+  @keyframes w-leg { 0%, 100% { transform: rotate(22deg); } 50% { transform: rotate(-22deg); } 75% { transform: translateY(-5px) rotate(0deg); } }
+  @keyframes w-leg-back { 0%, 100% { transform: rotate(16deg); } 50% { transform: rotate(-18deg); } 75% { transform: translateY(-4px) rotate(0deg); } }
+  .pet.walk .w-body { animation: w-bob calc(var(--stride, .8s) / 2) ease-in-out infinite alternate; }
+  @keyframes w-bob { to { transform: translateY(-3px); } }
+  .pet.walk .w-head { animation: w-nod var(--stride, .8s) ease-in-out -.1s infinite; }
+  @keyframes w-nod { 0%, 100% { transform: rotate(-3deg); } 50% { transform: rotate(3deg) translateY(-2px); } }
+  .pet.walk .w-tail { animation: w-tail 1.6s ease-in-out infinite alternate; }
+  @keyframes w-tail { from { transform: rotate(-6deg); } to { transform: rotate(8deg); } }
+  .pet.walk .w-shadow { animation: w-shadow calc(var(--stride, .8s) / 2) ease-in-out infinite alternate; }
+  @keyframes w-shadow { to { transform: scaleX(.95); } }
+  .pet .pet-body { animation: settle .3s ease-out; }
+  @keyframes settle { from { scale: 1 .9; } }
   .pet.g-loaf .pet-body { scale: 1.08 .86; transition: scale .4s; }
   .pet.g-sleep .pet-body { scale: 1.1 .8; transition: scale .6s; }
   .pet.g-stretch .pet-body { animation: stretch 1.4s ease-in-out; }
@@ -389,8 +406,8 @@ function syncGarden() {
   const box = $('pets'), have = new Set(G.pets.map(p => p.c.id));
   for (const c of CATS) if (col[c.id] && !have.has(c.id)) {
     const el = document.createElement('div'); el.className = 'pet';
-    el.innerHTML = `<div class="pet-body">${catHTML(c)}</div>`;
-    const p = { c, el, x: rand(.1, .9), y: rand(Y0, Y1), dir: 1, cool: 3000 };
+    el.innerHTML = `<div class="pet-body">${catHTML(c)}</div><svg class="walkpose" viewBox="0 0 256 256" aria-hidden="true">${buildWalk(c, '-w' + uid++)}</svg>`;
+    const p = { c, el, wp: el.querySelector('.walkpose'), x: rand(.1, .9), y: rand(Y0, Y1), dir: 1, cool: 3000 };
     el.onclick = () => { if (p.state !== 'interact') { setState(p, 'gesture', 1200, 'g-jump'); say(p, '¡Miau! ❤'); } };
     box.append(el); G.pets.push(p); setState(p, 'idle', rand(300, 2500));
   }
@@ -445,7 +462,9 @@ function tick(now) {
         }
       }
       // pseudo-3D: walking cats turn toward where they go; resting cats face the player
-      p.el.querySelector('.tilt').style.setProperty('--ry', `${p.state === 'walk' || p.state === 'interact' ? p.dir * 32 : 0}deg`);
+      p.el.querySelector('.tilt').style.setProperty('--ry', `${p.state === 'interact' ? p.dir * 32 : 0}deg`);
+      p.wp.style.transform = p.dir > 0 ? 'scaleX(-1)' : ''; // walking art faces left
+      p.el.style.setProperty('--stride', `${Math.min(1.1, Math.max(.22, .056 / (p.speed || .07)))}s`);
       p.el.style.setProperty('--dir', p.dir);
       const s = .6 + .55 * (p.y - Y0) / (Y1 - Y0), size = W * .11;
       p.el.style.width = size + 'px';

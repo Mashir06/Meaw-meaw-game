@@ -531,3 +531,97 @@ Idle: `float`; colas laterales `wing-l` (y espejo); fuegos `bob` + `twinkle`; ma
 | 30 | `gato-kitsune` | Gato Kitsune | Legendario |
 
 **Nomenclatura de assets**: `char_<id>_<variante>_<tamaño>.svg`, p. ej. `char_gato-dragon_idle_256.svg`.
+
+---
+
+## Base v3 — gato caminando (pose móvil)
+
+Pose a 4 patas, cuerpo de perfil ¾ **hacia la izquierda**, cabeza v2 de frente delante-izquierda, cola en S levantada atrás (ref. chibi siamés). Suelo (apoyo de las patitas) en **y = 238**. Para ir a la derecha: envolver todo en `transform="translate(256 0) scale(-1 1)"` (la cara v2 es simétrica, sirve igual).
+**Trazo orgánico**: nada de círculos/elipses/rects en partes del cuerpo; béziers asimétricas, patas que se estrechan, tripa que cuelga. Contorno `#1A161F` stroke 5 (patas 4), `round` en joins y caps.
+
+### 1. Cabeza (v2 tal cual)
+Las capas `head` + `face` de v2 (y con ellas `head`, `headTop`, `face`, `faceTop` de los 30 gatos) se dibujan sin cambios dentro de un grupo de pivote:
+```svg
+<g transform="translate(98 200)">            <!-- pivote = barbilla -->
+  <g class="w-head">                         <!-- CSS: cabeceo -->
+    <g transform="translate(-94 -102) scale(.74)"> …capas v2 head + face… </g>
+  </g>
+</g>
+```
+Equivale a `translate(4 98) scale(.74)`: la cabeza ocupa x35–162, y101 (puntas de oreja)–203 (barbilla); ojos en (67,166)/(131,166); boca y≈171–180.
+
+### 2. Cuerpo, patas, cola, sombra (pose base, sin animar)
+**Patrón de pivote** (todas las piezas que giran): `<g transform="translate(px py)"><g class="w-…">forma en coords locales, pivote = (0,0)</g></g>`. En SVG, la `transform` de CSS gira alrededor del origen local (0,0) = el pivote; no pongas `transform-origin` ni `transform-box`.
+
+| Pieza | Capa / orden | Forma (viewBox 256) |
+|---|---|---|
+| Sombra suelo | `ground` (1) | `M40,240 C70,232 190,230 228,238 C233,245 196,249 128,249 C70,249 35,247 40,240 Z` `#1A161F` op .25 (sin contorno) |
+| Cola | `back` (2), pivote `(210,162)` | `M218,164 C238,140 240,108 222,92 C210,82 192,86 188,98 C185,107 196,112 200,104 C206,96 216,100 220,110 C226,126 218,146 204,162 Z` en `<g transform="translate(210 162)"><g class="w-tail"><path transform="translate(-210 -162)" d="…"/></g></g>`; fill `fur`; manchas claras (óvalos irregulares) `M193,95 c3,-2 6,0 5,3 c-1,3 -6,2 -5,-3z` y `M201,89 c2,-2 5,-1 4,2 c-1,2 -4,2 -4,-2z` |
+| Pata trasera lejana | `body` (3), pivote `(208,189)` | forma **trasera** (abajo), fill `shade` |
+| Pata delantera lejana | `body` (4), pivote `(134,189)` | forma **delantera**, fill `shade` |
+| Torso | `body` (5) | `M112,158 C126,146 150,142 172,144 C196,146 214,152 222,168 C230,184 224,204 210,212 C196,218 178,214 162,216 C146,218 130,220 118,214 C104,206 100,176 112,158 Z` fill `fur` (= clip `tc`); tripa colgando entre x130–160 |
+| Tripa/babero | `body` (clip `tc`) | `M100,194 C126,204 168,206 232,196 L232,232 L100,232 Z` fill `belly` (frontera ondulada, no recta) |
+| Sombra lomo | `body` (clip `tc`) | `M196,148 C222,156 234,184 216,212 C228,186 220,162 196,148 Z` fill `shade` (anca derecha) |
+| Sombra bajo cabeza | `body` (clip `tc`) | `M108,186 C124,196 146,200 164,194 C162,206 132,212 110,204 Z` fill `shade` op .4 |
+| Contorno torso | `body` (6) | mismo `d` del torso, stroke 5, sin relleno |
+| Pata trasera cercana | `body` (7), pivote `(192,191)` | forma **trasera**, fill `fur` |
+| Pata delantera cercana | `body` (8), pivote `(118,191)` | forma **delantera**, fill `fur` |
+| Collar + cascabel | `body` (9) | banda `M76,198 Q100,214 126,200` (stroke 12 `#1A161F` + stroke 6 `accent`), casi tapada por la barbilla; cascabel `bell(98,214,11)` colgando bajo la barbilla |
+| Cabeza + cara | `head`/`face` (10) | grupo de §1 |
+
+**Formas de pata** (coords locales, pivote (0,0) en el hombro/cadera, apoyo en y≈47; la patita sobresale hacia delante = izquierda):
+- Delantera: `M-10,-4 C-12,10 -10,24 -9,33 C-15,36 -17,44 -11,46 C-4,48 7,48 10,45 C12,41 10,36 8,33 C10,22 12,8 10,-4`
+- Trasera (muslo más ancho): `M-14,-6 C-16,10 -10,22 -8,32 C-14,36 -16,44 -10,46 C-3,48 8,48 10,45 C12,41 10,36 8,32 C12,22 18,8 14,-6`
+- Relleno: el `d` con `Z` al final. **Contorno: el mismo `d` sin `Z`**: así el borde de arriba no se dibuja y la pata se funde con el torso sin raya.
+- Dedos (solo patas cercanas): `M-7,41 l1,4 M-2,41 l1,5` stroke 2.5. Almohadilla opcional: `M-9,46 c3,-2 9,-2 12,0` stroke 2 `#F6DCD3`.
+- Si el gato tiene `bodyFill`, se aplica al torso y a las patas cercanas; las lejanas usan `bodyShade`.
+
+### 3. Ciclo de caminar (CSS sobre grupos SVG)
+Trote diagonal: delantera cercana + trasera lejana en fase; delantera lejana + trasera cercana con desfase de media zancada. Zancada **0.8 s**. Ángulo positivo = patita hacia delante (izquierda).
+```css
+.walking .w-leg { animation: w-leg .8s ease-in-out infinite; }
+.walking .w-nf, .walking .w-fb { animation-delay: 0s; }
+.walking .w-ff, .walking .w-nb { animation-delay: -.4s; }
+.walking .w-nb, .walking .w-fb { animation-name: w-leg-back; }  /* traseras: menos amplitud */
+@keyframes w-leg      { 0%,100% { transform: rotate(22deg); } 50% { transform: rotate(-22deg); }
+                        75% { transform: translateY(-5px) rotate(0deg); } }      /* levanta al avanzar */
+@keyframes w-leg-back { 0%,100% { transform: rotate(16deg); } 50% { transform: rotate(-18deg); }
+                        75% { transform: translateY(-4px) rotate(0deg); } }
+.walking .w-body { animation: w-bob .4s ease-in-out infinite alternate; }        /* todo menos sombra y patas */
+@keyframes w-bob  { from { transform: translateY(0); } to { transform: translateY(-3px); } }
+.walking .w-head { animation: w-nod .8s ease-in-out infinite; animation-delay: -.1s; }  /* llega tarde */
+@keyframes w-nod  { 0%,100% { transform: rotate(-3deg) translateY(0); } 50% { transform: rotate(3deg) translateY(-2px); } }
+.walking .w-tail { animation: w-tail 1.6s ease-in-out infinite alternate; }
+@keyframes w-tail { from { transform: rotate(-6deg); } to { transform: rotate(8deg); } }
+.walking .w-shadow { animation: w-shadow .4s ease-in-out infinite alternate; }
+@keyframes w-shadow { from { transform: scaleX(1); } to { transform: scaleX(.95); } }  /* pivote (128,240) */
+@media (prefers-reduced-motion: reduce) { .walking * { animation: none !important; } } /* solo se desliza */
+```
+`.w-body` envuelve cola, torso, collar y cabeza. Las patas van fuera, así que el cuerpo sube y baja mientras las patitas siguen pisando el suelo. Las patas llevan `class="w-leg w-nf"` (cercana delantera), `w-ff`, `w-nb`, `w-fb`. La sombra usa el patrón de pivote en (128,240).
+Velocidad en el patio: ≈ 60 px/s a escala 1 (una zancada ≈ 48 px); si el gato va más rápido, baja `animation-duration` en proporción.
+
+### 4. Cuándo usar cada pose y qué accesorios se ven
+- **Patio**: el gato camina (v3) mientras se desplaza. Al llegar se **sienta** (v2) con un fundido de 150 ms entre las dos poses más un rebote `scaleY .94→1`. Tarjetas, gacha y colección: siempre sentado (v2).
+- `head`, `headTop`, `face`, `faceTop`, `earR`, `earsOver`: **todo igual**, dentro del grupo de cabeza (§1).
+- `body` / `bodyTop` **de cuello** (lo que en v2 queda por encima de y≈175: pañuelos, lazos, perlas, torque, shimenawa, pinchos del collar) → con la **transformación de la cabeza**, sin cabeceo: `translate(4 98) scale(.74)`. Quedan bajo la barbilla. Si el gato no tiene collar, se oculta el cascabel v3.
+- `body` / `bodyTop` **de tronco** (bandas del bombero, panel del robot, cara de calabaza, rayo, vendas, solapas) → sobre el torso con `translate(92 84) scale(.62)` y `clip-path="url(#tc)"`. El centro del pecho v2 (128,160) cae así en (171,183).
+- `back` (alas, capas, mochila, colas de kitsune): mismo `translate(92 84) scale(.62)`, por detrás del torso, anclado a la cruz en ≈(170,150). Mantienen sus clases (`wing-l`, `flutter`…). Sale un ala por lado, en perspectiva, sin cambios.
+- **Puntas de cola v2** (aleta de sirena, pompón de conejo, punta del dragón, plumas del fénix): pasan al grupo `.w-tail` con `translate(180 -92)`, de (14,190) a la punta v3 ≈(194,98).
+- `front` **sostenido** (palillos, shuriken, mando, espina, escudo y espada, varitas, cucharón, lupa, paleta y pincel, guitarra, bambú, engranaje): **se ocultan** al caminar. Ocultar todo lo que lleve las clases `mash`/`shield`, o mejor una marca `held: true` por accesorio.
+- `front` **ambiental** (`twinkle`, `bubble`, `puff`, `flutter` de murciélagos, chispas legendarias, fuegos fatuos): se ven, sin transformar.
+- `ground` (cama de arroz, regalo, cesta, charco): **se oculta** al caminar; solo existe mientras el gato está sentado.
+
+### 5. Base v2 sentada menos geométrica (reemplazos exactos en `cats.js`)
+| Parte | Reemplazo |
+|---|---|
+| `BODY` (asimétrico, tripa con leve hueco entre patas) | `M70 132 C44 150 33 194 39 223 C42 237 57 244 80 242 C104 240 116 245 130 244 C150 243 164 239 182 242 C200 243 213 235 216 220 C221 192 213 156 186 131 C150 138 104 138 70 132 Z` |
+| `TAIL` (base gruesa, punta enroscada hacia arriba) | `M54 230 C34 236 12 226 7 206 C3 190 12 178 24 178 C34 179 38 188 34 196 C31 203 38 210 50 212 C56 216 58 224 54 230 Z` (manchas: mantener, desplazadas a (17,188),(25,184)) |
+| Sombra lateral (elipse 50,196) | `M44 170 C56 184 60 214 50 234 C40 222 38 190 44 170 Z` |
+| Sombras bajo cabeza / base (elipses) | `M54 136 C90 152 170 154 204 134 C196 160 70 162 54 136 Z` y `M40 226 C90 218 170 216 218 224 L218 246 L40 246 Z` (op .4, clip `bc`) |
+| Patitas traseras (elipses) | `M77 236 C77 229 86 227 94 229 C100 231 101 238 96 240 C89 242 79 242 77 236 Z` y `M179 236 C179 229 170 227 162 229 C156 231 155 238 160 240 C167 242 177 242 179 236 Z` |
+| Patitas delanteras (elipses) | `M105 239 C105 234 112 232 118 233 C123 234 124 240 120 242 C115 244 106 243 105 239 Z` y `M151 239 C151 234 144 232 138 233 C133 234 132 240 136 242 C141 244 150 243 151 239 Z` |
+| Patas (líneas) | `M103 206 Q99 222 105 236 M124 214 Q126 226 123 238 M132 214 Q130 226 133 238 M153 206 Q157 222 151 236` |
+| Sombra suelo (elipse) | `M48 240 C70 234 186 233 210 239 C214 246 180 250 128 250 C78 250 44 247 48 240 Z` |
+| Dedos traseros | `M84 232 q1 3 0 5 M91 231 q1 3 0 5 M165 231 q-1 3 0 5 M172 232 q-1 3 0 5` (curvos, no rectos) |
+
+**Opcional, trazo "a mano"**: `<filter id="wob"><feTurbulence type="fractalNoise" baseFrequency=".04" numOctaves="2" seed="3"/><feDisplacementMap in="SourceGraphic" scale="2"/></filter>`, aplicado **solo** a los contornos de cuerpo, cola y patas (nunca a ojos ni boca). Coste: con 30 gatos en el patio, aplicarlo solo en la pose sentada (estática) o prerenderizar.

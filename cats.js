@@ -13,8 +13,8 @@ const sh = (y, s) => y && s ? `<g transform="translate(0 ${y})">${s}</g>` : ''; 
 const EAR_L = 'M46 66 C44 40 52 14 70 6 Q76 3 82 8 C96 20 106 30 110 40 Z', EAR_L_IN = 'M60 52 C60 36 66 20 74 14 C84 22 92 30 96 38 Z';
 const HEAD = 'M42 94 C40 52 78 32 128 32 C178 32 216 52 214 94 C213 126 178 142 128 142 C78 142 43 126 42 94 Z';
 const MUZZLE = 'M40 124 C60 120 84 112 100 98 C112 88 120 80 128 74 C136 80 144 88 156 98 C172 112 196 120 216 124 L216 148 L40 148 Z';
-const BODY = 'M70 132 C42 156 32 200 40 226 C46 240 60 242 76 242 L180 242 C196 242 210 240 216 226 C224 200 214 156 186 132 Z';
-const TAIL = 'M52 228 C30 232 10 220 8 200 C6 184 18 176 28 180 C38 184 36 198 48 206 Z';
+const BODY = 'M70 132 C44 150 33 194 39 223 C42 237 57 244 80 242 C104 240 116 245 130 244 C150 243 164 239 182 242 C200 243 213 235 216 220 C221 192 213 156 186 131 C150 138 104 138 70 132 Z';
+const TAIL = 'M54 230 C34 236 12 226 7 206 C3 190 12 178 24 178 C34 179 38 188 34 196 C31 203 38 210 50 212 C56 216 58 224 54 230 Z';
 const EYES = [85, 171], EY = 92;
 
 function buildCat(c, uid = "") { // uid: unique suffix so the same cat can appear twice in one page (clipPath ids)
@@ -35,20 +35,20 @@ function buildCat(c, uid = "") { // uid: unique suffix so the same cat can appea
   })[kind] || `<ellipse cx="${x}" cy="${EY}" rx="6" ry="9.5" fill="${p.eye}"/><circle cx="${x + 2}" cy="${EY - 5}" r="2.4" fill="#fff"/>`;
   const A = k => sh((c.shift || {})[k], a[k]) || a[k] || '';
   return {
-    ground: `<ellipse cx="128" cy="243" rx="84" ry="9" fill="${O}" opacity=".3"/>` + A('ground'),
-    back: `<path d="${TAIL}" ${st(p.fur, 5)}/><g fill="${light}"><circle cx="16" cy="188" r="3"/><circle cx="24" cy="183" r="2.5"/><circle cx="13" cy="197" r="2"/></g>` + A('back'),
+    ground: `<path d="M48 240 C70 234 186 233 210 239 C214 246 180 250 128 250 C78 250 44 247 48 240 Z" fill="${O}" opacity=".3"/>` + A('ground'),
+    back: `<path d="${TAIL}" ${st(p.fur, 5)}/><g fill="${light}"><circle cx="17" cy="188" r="3"/><circle cx="25" cy="184" r="2.5"/><circle cx="13" cy="197" r="2"/></g>` + A('back'),
     body: `<defs><clipPath id="${id}-bc"><path d="${BODY}"/></clipPath></defs>
       <path d="${BODY}" fill="${bodyFill}"/>
       <g clip-path="url(#${id}-bc)">
         ${c.bodyFill ? '' : `<path d="M76 140 C66 172 64 210 70 244 L198 244 C204 210 200 172 186 140 Z" fill="${p.belly}"/>`}
-        <ellipse cx="50" cy="196" rx="14" ry="36" fill="${bodyShade}"/>
-        <g fill="${bodyShade}" opacity=".4"><ellipse cx="128" cy="140" rx="76" ry="17"/><ellipse cx="128" cy="252" rx="94" ry="27"/></g>
+        <path d="M44 170 C56 184 60 214 50 234 C40 222 38 190 44 170 Z" fill="${bodyShade}"/>
+        <g fill="${bodyShade}" opacity=".4"><path d="M54 136 C90 152 170 154 204 134 C196 160 70 162 54 136 Z"/><path d="M40 226 C90 218 170 216 218 224 L218 246 L40 246 Z"/></g>
       </g>
       <path d="${BODY}" fill="none" stroke="${O}" stroke-width="5" stroke-linejoin="round"/>
-      <g ${st('#F7E3DC')}><ellipse cx="88" cy="235" rx="11" ry="6"/><ellipse cx="168" cy="235" rx="11" ry="6"/></g>
-      <path d="M84 232v5M92 232v5M164 232v5M172 232v5" stroke="${O}" stroke-width="2" stroke-linecap="round"/>
-      <path d="M104 208 Q100 224 104 236M124 216V238M132 216V238M152 208 Q156 224 152 236" stroke="${O}" stroke-width="4" fill="none" stroke-linecap="round"/>
-      <g ${st('#F6DCD3', 3)}><ellipse cx="114" cy="239" rx="9" ry="5"/><ellipse cx="142" cy="239" rx="9" ry="5"/></g>` +
+      <g ${st('#F7E3DC')}><path d="M77 236 C77 229 86 227 94 229 C100 231 101 238 96 240 C89 242 79 242 77 236 Z"/><path d="M179 236 C179 229 170 227 162 229 C156 231 155 238 160 240 C167 242 177 242 179 236 Z"/></g>
+      <path d="M84 232 q1 3 0 5 M91 231 q1 3 0 5 M165 231 q-1 3 0 5 M172 232 q-1 3 0 5" stroke="${O}" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <path d="M103 206 Q99 222 105 236 M124 214 Q126 226 123 238 M132 214 Q130 226 133 238 M153 206 Q157 222 151 236" stroke="${O}" stroke-width="4" fill="none" stroke-linecap="round"/>
+      <g ${st('#F6DCD3', 3)}><path d="M105 239 C105 234 112 232 118 233 C123 234 124 240 120 242 C115 244 106 243 105 239 Z"/><path d="M151 239 C151 234 144 232 138 233 C133 234 132 240 136 242 C141 244 150 243 151 239 Z"/></g>` +
       A('body') +
       (c.collar === false ? '' : `<path d="M68 140 Q128 166 188 140" stroke="${O}" stroke-width="12" fill="none" stroke-linecap="round"/><path d="M68 140 Q128 166 188 140" stroke="${p.accent}" stroke-width="6" fill="none" stroke-linecap="round"/>
         <circle cx="128" cy="157" r="6" fill="none" stroke="${O}" stroke-width="3"/>${bell(128, 176, 17)}`) +
@@ -360,4 +360,42 @@ const CATS = [
     } },
 ];
 
-if (typeof module !== 'undefined') module.exports = { CATS, buildCat };
+const LEG_F = 'M-10 -4 C-12 10 -10 24 -9 33 C-15 36 -17 44 -11 46 C-4 48 7 48 10 45 C12 41 10 36 8 33 C10 22 12 8 10 -4';
+const LEG_B = 'M-14 -6 C-16 10 -10 22 -8 32 C-14 36 -16 44 -10 46 C-3 48 8 48 10 45 C12 41 10 36 8 32 C12 22 18 8 14 -6';
+const TORSO = 'M112 158 C126 146 150 142 172 144 C196 146 214 152 222 168 C230 184 224 204 210 212 C196 218 178 214 162 216 C146 218 130 220 118 214 C104 206 100 176 112 158 Z';
+const WTAIL = 'M218 164 C238 140 240 108 222 92 C210 82 192 86 188 98 C185 107 196 112 200 104 C206 96 216 100 220 110 C226 126 218 146 204 162 Z';
+const TORSO_ITEMS = new Set(['gato-sushi', 'gato-zombi', 'gato-astronauta', 'gato-dragon', 'gato-bombero', 'gato-detective', 'gato-calabaza', 'gato-robot', 'gato-rayo', 'gato-caballero']);
+// Walking pose (side view, facing left): v2 head on top of an animated 4-legged body. Held items and ground props are hidden.
+function buildWalk(c, uid = '') {
+  const L = buildCat(c, uid), id = c.id + uid, p = c.colors, a = c.acc || {}, light = mix(p.fur, '#FFFFFF', .5);
+  const A = k => sh((c.shift || {})[k], a[k]) || a[k] || '';
+  const near = c.bodyFill || p.fur, far = c.bodyShade || p.shade;
+  const leg = (cls, x, y, d, fill, front) => `<g transform="translate(${x} ${y})"><g class="w-leg ${cls}"><path d="${d}Z" fill="${fill}"/><path d="${d}" fill="none" stroke="${O}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>` +
+    (front ? `<path d="M-7 41 l1 4 M-2 41 l1 5" stroke="${O}" stroke-width="2.5" stroke-linecap="round"/><path d="M-9 46 c3 -2 9 -2 12 0" stroke="#F6DCD3" stroke-width="2" fill="none"/>` : '') + '</g></g>';
+  const torsoItems = TORSO_ITEMS.has(c.id);
+  return `<defs><clipPath id="${id}-tc"><path d="${TORSO}"/></clipPath></defs>
+    <g transform="translate(128 240)"><g class="w-shadow"><path transform="translate(-128 -240)" d="M40 240 C70 232 190 230 228 238 C233 245 196 249 128 249 C70 249 35 247 40 240 Z" fill="${O}" opacity=".25"/></g></g>
+    ${leg('w-fb', 208, 189, LEG_B, far)}${leg('w-ff', 134, 189, LEG_F, far)}
+    <g class="w-body">
+      <g transform="translate(92 84) scale(.62)">${A('back')}</g>
+      <g transform="translate(210 162)"><g class="w-tail"><g transform="translate(-210 -162)"><path d="${WTAIL}" ${st(p.fur, 5)}/>
+        <g fill="${light}"><path d="M193 95 c3 -2 6 0 5 3 c-1 3 -6 2 -5 -3z"/><path d="M201 89 c2 -2 5 -1 4 2 c-1 2 -4 2 -4 -2z"/></g></g></g></g>
+      <path d="${TORSO}" fill="${near}"/>
+      <g clip-path="url(#${id}-tc)">
+        ${c.bodyFill ? '' : `<path d="M100 194 C126 204 168 206 232 196 L232 232 L100 232 Z" fill="${p.belly}"/>`}
+        <path d="M196 148 C222 156 234 184 216 212 C228 186 220 162 196 148 Z" fill="${far}"/>
+        <path d="M108 186 C124 196 146 200 164 194 C162 206 132 212 110 204 Z" fill="${far}" opacity=".4"/>
+        ${torsoItems ? `<g transform="translate(92 84) scale(.62)">${A('body')}${A('bodyTop')}</g>` : ''}
+      </g>
+      <path d="${TORSO}" fill="none" stroke="${O}" stroke-width="5" stroke-linejoin="round"/>
+    </g>
+    ${leg('w-nb', 192, 191, LEG_B, near)}${leg('w-nf', 118, 191, LEG_F, near, true)}
+    <g class="w-body">
+      ${c.collar === false ? '' : `<path d="M76 198 Q100 214 126 200" stroke="${O}" stroke-width="12" fill="none" stroke-linecap="round"/><path d="M76 198 Q100 214 126 200" stroke="${p.accent}" stroke-width="6" fill="none" stroke-linecap="round"/>`}
+      ${torsoItems ? '' : `<g transform="translate(4 98) scale(.74)">${A('body')}${A('bodyTop')}</g>`}
+      <g transform="translate(98 200)"><g class="w-head"><g transform="translate(-94 -102) scale(.74)">${L.head}${L.face}</g></g></g>
+      ${c.collar === false ? '' : bell(98, 214, 11)}
+    </g>`;
+}
+
+if (typeof module !== 'undefined') module.exports = { CATS, buildCat, buildWalk };
