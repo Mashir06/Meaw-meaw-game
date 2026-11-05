@@ -128,19 +128,10 @@
   .count { position: absolute; top: 8px; right: 10px; background: #1A161F; color: #fff; font: 800 .8rem system-ui, sans-serif; padding: 4px 10px; border-radius: 999px; }
   /* ---- patio ---- */
   #patio { padding: 0 16px 24px; }
-  .garden { position: relative; max-width: 1100px; height: min(600px, 68vh); margin: auto; border: 5px solid #1A161F; border-radius: 22px; overflow: hidden;
-    background: repeating-linear-gradient(100deg, #8FD27A 0 40px, #86CB71 40px 80px); }
-  .sky { position: absolute; inset: 0 0 auto; height: 28%; background: linear-gradient(#9FDBFF, #CDEFFF); }
-  .sun { position: absolute; right: 8%; top: 18%; width: 56px; height: 56px; border-radius: 50%; background: #FFD54F; border: 4px solid #1A161F; }
-  .cloud { position: absolute; height: 26px; width: 90px; border-radius: 999px; background: #fff; border: 4px solid #1A161F; animation: drift 40s linear infinite; }
-  .c1 { top: 22%; left: -20%; } .c2 { top: 48%; left: -20%; width: 60px; animation-delay: -18s; animation-duration: 55s; }
-  @keyframes drift { to { left: 110%; } }
-  .fence { position: absolute; left: 0; right: 0; top: 18%; height: 13%; border-bottom: 5px solid #1A161F;
-    background: linear-gradient(transparent 30%, #E8C99B 30% 44%, transparent 44% 70%, #E8C99B 70% 84%, transparent 84%),
-      repeating-linear-gradient(90deg, #F4DDB4 0 26px, #1A161F 26px 30px, transparent 30px 44px, #1A161F 44px 48px); }
+  .garden { position: relative; max-width: 1100px; aspect-ratio: 5 / 3; margin: auto; border: 5px solid #1A161F; border-radius: 22px; overflow: hidden; background: #E8D3A4; }
   .deco { position: absolute; inset: 0; width: 100%; height: 100%; }
   #pets { position: absolute; inset: 0; }
-  .pet { position: absolute; left: 0; top: 0; width: 110px; transform-origin: 50% 100%; cursor: pointer; }
+  .pet { position: absolute; left: 0; top: 0; transform-origin: 50% 100%; cursor: pointer; }
   .pet .cat { width: 100%; margin: 0; }
   .pet .tilt { transition: transform .35s ease-out; }
   .pet-body { transform-origin: 50% 95%; }
@@ -181,16 +172,55 @@
 <nav class="tabs"><button data-tab="patio" class="on">Patio</button><button data-tab="gacha">Gacha</button><button data-tab="coleccion">Colección <span id="owned"></span></button></nav></header>
 <section id="patio" class="tab">
   <div class="garden" id="garden">
-    <div class="sky"><span class="sun"></span><span class="cloud c1"></span><span class="cloud c2"></span></div>
-    <div class="fence"></div>
     <svg class="deco" viewBox="0 0 1000 600" preserveAspectRatio="none" aria-hidden="true">
-      <g stroke="#1A161F" stroke-width="5" stroke-linejoin="round">
-        <rect x="70" y="60" width="36" height="140" rx="8" fill="#8A5A3B"/><circle cx="60" cy="70" r="56" fill="#5DB86A"/><circle cx="120" cy="50" r="50" fill="#6CC979"/><circle cx="96" cy="110" r="46" fill="#4FA85D"/>
-        <ellipse cx="880" cy="190" rx="90" ry="44" fill="#5DB86A"/><ellipse cx="960" cy="200" rx="60" ry="36" fill="#4FA85D"/>
-      </g>
-      <g stroke="#1A161F" stroke-width="3">
-        <circle cx="300" cy="230" r="9" fill="#FF8FA3"/><circle cx="330" cy="250" r="8" fill="#FFE27A"/><circle cx="700" cy="560" r="10" fill="#9FC9F2"/><circle cx="730" cy="575" r="8" fill="#FF8FA3"/>
-        <circle cx="150" cy="520" r="9" fill="#FFE27A"/><circle cx="560" cy="250" r="8" fill="#C9A0FF"/><circle cx="930" cy="430" r="9" fill="#FF8FA3"/>
+      <g stroke="#1A161F" stroke-width="4" stroke-linejoin="round" stroke-linecap="round">
+        <!-- yard -->
+        <rect x="-5" y="250" width="1010" height="360" fill="#E8D3A4" stroke="none"/>
+        <g fill="#B5D98C" stroke="none"><ellipse cx="140" cy="470" rx="120" ry="40"/><ellipse cx="620" cy="400" rx="160" ry="34"/><ellipse cx="900" cy="560" rx="130" ry="40"/><ellipse cx="380" cy="590" rx="140" ry="30"/></g>
+        <path d="M300 330 q6 -12 12 0 M560 520 q6 -12 12 0 M760 330 q6 -12 12 0 M60 600 q6 -14 12 0" fill="none" stroke="#C49A62" stroke-width="3"/>
+        <!-- house wall + eave -->
+        <rect x="-5" y="-5" width="1010" height="215" fill="#F4ECDD"/>
+        <rect x="-5" y="-5" width="1010" height="30" fill="#5B5466"/>
+        <path d="M0 25 H1000" stroke-width="5"/>
+        <!-- closed shoji (left) -->
+        <g fill="#FFFDF6"><rect x="40" y="40" width="190" height="165"/><rect x="230" y="40" width="190" height="165"/></g>
+        <g stroke="#B08960" stroke-width="3"><path d="M40 81H420M40 122H420M40 163H420M87 40V205M135 40V205M182 40V205M277 40V205M325 40V205M372 40V205"/></g>
+        <g fill="none" stroke-width="5"><rect x="40" y="40" width="190" height="165"/><rect x="230" y="40" width="190" height="165"/></g>
+        <!-- open room (centre): tatami, low table under a quilt, scroll -->
+        <rect x="440" y="40" width="380" height="165" fill="#EADCC4"/>
+        <rect x="440" y="150" width="380" height="55" fill="#CFE0A0"/><path d="M440 168H820M440 186H820M630 150V205" stroke="#9DB06E" stroke-width="2"/>
+        <rect x="610" y="52" width="46" height="84" rx="4" fill="#FFF6EC"/><path d="M606 52H660M606 136H660" stroke-width="5"/>
+        <g fill="#E8708F" stroke="none"><circle cx="633" cy="100" r="9"/><circle cx="621" cy="86" r="4"/><circle cx="633" cy="80" r="4"/><circle cx="645" cy="86" r="4"/></g>
+        <path d="M500 160 Q500 128 530 128 H700 Q730 128 730 160 L740 196 H490 Z" fill="#5E8FCF"/>
+        <g fill="#FFF6EC" stroke="none"><circle cx="530" cy="168" r="6"/><circle cx="580" cy="180" r="6"/><circle cx="640" cy="166" r="6"/><circle cx="700" cy="182" r="6"/><circle cx="560" cy="146" r="5"/><circle cx="680" cy="146" r="5"/></g>
+        <rect x="508" y="118" width="214" height="14" rx="4" fill="#C98B5A"/>
+        <!-- open shoji slid aside (right) -->
+        <rect x="820" y="40" width="160" height="165" fill="#FFFDF6"/><path d="M820 81H980M820 122H980M820 163H980M860 40V205M900 40V205M940 40V205" stroke="#B08960" stroke-width="3"/>
+        <rect x="820" y="40" width="160" height="165" fill="none" stroke-width="5"/>
+        <!-- posts -->
+        <g fill="#7A5238"><rect x="22" y="25" width="18" height="185"/><rect x="420" y="25" width="20" height="185"/><rect x="980" y="25" width="25" height="185"/></g>
+        <!-- engawa (wooden veranda) -->
+        <rect x="-5" y="205" width="1010" height="48" fill="#C48A55"/>
+        <path d="M0 221H1000M0 237H1000" stroke="#8A5A33" stroke-width="2.5"/><path d="M160 205v16M380 221v16M610 205v16M820 221v16M260 237v16M720 237v16" stroke="#8A5A33" stroke-width="2.5"/>
+        <rect x="-5" y="253" width="1010" height="16" fill="#8A5A33"/>
+        <g fill="#6B4228"><rect x="60" y="269" width="16" height="22"/><rect x="480" y="269" width="16" height="22"/><rect x="920" y="269" width="16" height="22"/></g>
+        <ellipse cx="300" cy="298" rx="66" ry="15" fill="#BDB8B0"/>
+        <!-- bamboo fence + bush -->
+        <g fill="#CFDC8E"><rect x="905" y="268" width="22" height="120" rx="8"/><rect x="930" y="262" width="22" height="126" rx="8"/><rect x="955" y="268" width="22" height="120" rx="8"/><rect x="980" y="262" width="22" height="126" rx="8"/></g>
+        <path d="M900 300H1005M900 350H1005" stroke="#7A8F3A" stroke-width="6"/>
+        <g fill="#6DB06B"><circle cx="20" cy="320" r="44"/><circle cx="70" cy="300" r="36"/><circle cx="60" cy="350" r="34"/></g>
+        <g fill="#FFE27A" stroke-width="2"><circle cx="40" cy="300" r="5"/><circle cx="76" cy="336" r="5"/></g>
+        <!-- items cats use: cushion, bowl, yarn, box -->
+        <ellipse cx="220" cy="378" rx="64" ry="24" fill="#F2A0B8"/><ellipse cx="220" cy="372" rx="44" ry="14" fill="#F8C3D2" stroke="none"/><path d="M156 378l-10 6M284 378l10 6" stroke="#E8708F" stroke-width="4"/>
+        <path d="M708 496 L812 496 L800 536 L696 536 Z" fill="#FFF6EC"/>
+        <path d="M708 506 Q712 528 735 528 H765 Q788 528 792 506 Z" fill="#6FA8DC"/><ellipse cx="750" cy="506" rx="42" ry="9" fill="#8FC0EA"/><g fill="#C98B5A" stroke="none"><circle cx="738" cy="505" r="4"/><circle cx="752" cy="503" r="4"/><circle cx="764" cy="507" r="4"/></g>
+        <path d="M470 552 Q520 580 560 560" fill="none" stroke="#E8708F" stroke-width="3"/>
+        <circle cx="450" cy="545" r="20" fill="#E8708F"/><path d="M436 534 Q452 548 446 564M444 528 Q464 540 462 562" fill="none" stroke="#B84A6A" stroke-width="2.5"/>
+        <path d="M800 330 L880 330 L880 392 L800 392 Z" fill="#D9A866"/><path d="M800 330 L816 316 L896 316 L880 330 Z" fill="#C08A4A"/><path d="M880 330 L896 316 L896 378 L880 392 Z" fill="#B57D40"/>
+        <path d="M800 330 L782 308 L812 318 Z M880 330 L900 304 L906 318 Z" fill="#E3B877"/><path d="M820 350 H860" stroke="#A06E35" stroke-width="3"/>
+        <!-- potted plant -->
+        <path d="M120 520 L176 520 L168 566 L128 566 Z" fill="#D4774F"/><rect x="114" y="512" width="68" height="12" rx="4" fill="#C0653F"/>
+        <g fill="#5DB86A"><path d="M148 512 Q128 472 112 470 Q130 490 140 514Z"/><path d="M148 512 Q150 462 160 452 Q160 486 154 514Z"/><path d="M150 512 Q176 480 190 482 Q172 496 158 514Z"/></g>
       </g>
     </svg>
     <div id="pets"></div>
@@ -380,7 +410,13 @@ const GESTURES = [
   { cls: 'g-jump', t: 1200, say: '¡Miau!' }, { cls: 'g-spin', t: 2000, say: '🌀' }, { cls: 'g-groom', t: 2500, say: '✨' }, { cls: 'zoom', t: 0, say: '💨' },
 ];
 const rand = (a, b) => a + Math.random() * (b - a);
-const Y0 = .42, Y1 = .97; // walkable band (fraction of garden height)
+const SPOTS = [
+  { x: .22, y: .64, cls: 'g-sleep', t: 6000, say: '💤' },       // cojín
+  { x: .75, y: .87, cls: 'g-groom', t: 3500, say: 'ñam ñam' },  // cuenco
+  { x: .45, y: .93, cls: 'g-spin', t: 2000, say: '🧶' },        // ovillo
+  { x: .84, y: .66, cls: 'g-loaf', t: 5000, say: '📦 ♪' },      // caja
+];
+const Y0 = .5, Y1 = .97; // walkable band (fraction of garden height)
 function say(pet, text) {
   const b = document.createElement('div'); b.className = 'bubble'; b.textContent = text;
   pet.el.append(b); setTimeout(() => b.remove(), 1800);
@@ -435,11 +471,18 @@ function tick(now) {
       if (p.state === 'walk') {
         const dx = p.tx - p.x, dy = p.ty - p.y, d = Math.hypot(dx * W / H, dy), step = p.speed * dt / 1000;
         if (Math.abs(dx) > .005) p.dir = Math.sign(dx);
-        if (d <= step || p.timer <= 0) setState(p, 'idle', rand(800, 3000));
+        if (d <= step || p.timer <= 0) {
+          const s = p.spot; p.spot = null;
+          if (s && d <= step) { p.spot = s; setState(p, 'gesture', s.t, s.cls); say(p, s.say); } else setState(p, 'idle', rand(800, 3000));
+        }
         else { p.x += dx / d * step * H / W; p.y += dy / d * step; }
       } else if (p.timer <= 0) {
+        p.spot = null;
         if (p.state === 'interact' || p.state === 'gesture' || Math.random() < .6) walkTo(p, p.x + rand(-.4, .4), p.y + rand(-.2, .2));
-        else {
+        else if (Math.random() < .45) {
+          const s = pick(SPOTS);
+          if (!G.pets.some(q => q.spot === s)) { walkTo(p, s.x + rand(-.02, .02), s.y); p.spot = s; }
+        } else {
           const g = pick(GESTURES);
           if (g.cls === 'zoom') walkTo(p, rand(.05, .95), rand(Y0, Y1), .3); else setState(p, 'gesture', g.t, g.cls);
           say(p, g.say);
@@ -448,7 +491,8 @@ function tick(now) {
       // pseudo-3D: walking cats turn toward where they go; resting cats face the player
       p.el.querySelector('.tilt').style.setProperty('--ry', `${p.state === 'walk' || p.state === 'interact' ? p.dir * 32 : 0}deg`);
       p.el.style.setProperty('--dir', p.dir);
-      const s = .55 + .6 * (p.y - Y0) / (Y1 - Y0), size = 110;
+      const s = .6 + .55 * (p.y - Y0) / (Y1 - Y0), size = W * .11;
+      p.el.style.width = size + 'px';
       p.el.style.transform = `translate(${p.x * W - size / 2}px, ${p.y * H - size}px) scale(${s})`;
       p.el.style.zIndex = Math.round(p.y * 1000);
     }
