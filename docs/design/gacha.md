@@ -26,7 +26,7 @@ Fuente del catálogo: `docs/art/cat-designs.md` (tabla *Resumen*): **30 gatos** 
 ## Garantías
 
 - **x10**: al menos **un Raro o mejor**. Si las 10 cápsulas salen Común, la **10.ª** se vuelve a tirar en la tabla Raro+ (Raro 30 : Épico 12 : Legendario 3, normalizado = 66,7 / 26,7 / 6,6 %).
-- **Pity (lástima)**: contador de tiradas sin Legendario, compartido entre x1 y x10. Si llega a **50**, la tirada 50 es **Legendario seguro**. Se reinicia a 0 al obtener cualquier Legendario (por suerte o por pity). Con 3 % la media es ~33 tiradas; el pity solo protege la mala racha (~22 % de los jugadores lo verían).
+- **Pity (lástima)**: contador de tiradas sin Legendario, compartido entre x1 y x10. Si llega a **80**, la tirada 80 es **Legendario seguro**. Se reinicia a 0 al obtener cualquier Legendario (por suerte o por pity). Con 3 % la media es ~33 tiradas; el pity solo protege la mala racha (~9 % de los jugadores lo verían).
 - Orden en x10: se resuelven las 10 tiradas en secuencia aplicando el pity a cada una; la garantía Raro+ se aplica al final sobre la 10.ª.
 - **Mostrar las probabilidades** en un botón "ⓘ" junto a la máquina (transparencia, sobre todo con público infantil).
 
@@ -96,7 +96,7 @@ Moneda/coste de tiradas · banners o gatos destacados (rate-up) · conversión d
 | `PULL_COST` | 0 (gratis) |
 | `MULTI_PULL_COUNT` | 10 |
 | `MULTI_GUARANTEE_MIN_RARITY` | Raro (aplicado a la cápsula 10) |
-| `PITY_LEGENDARIO` | 50 (la tirada 50 sin Legendario es Legendario) |
+| `PITY_LEGENDARIO` | 80 (la tirada 80 sin Legendario es Legendario) |
 | `CAPSULE_COLOR` | Común `#B8C2CC` · Raro `#4FA3F7` · Épico `#A65BF2` · Legendario `#F5B83D` |
 | `T_CRANK` | 800 ms |
 | `T_SHAKE` / `T_SHAKE_X10` | 400 ms / 500 ms |

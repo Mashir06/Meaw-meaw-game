@@ -93,6 +93,7 @@
   .pull.ten { background: #C9354A; color: #fff; }
   .pull:active:not(:disabled) { transform: translateY(4px); box-shadow: 0 2px 0 #1A161F; }
   .pull:disabled { filter: grayscale(.7) brightness(.7); cursor: default; }
+  .pity { margin: 14px 0 0; font-weight: 700; } .pity b { color: var(--legendario); }
   .rates { color: var(--muted); font-size: .8rem; text-align: center; max-width: 520px; }
   /* ---- capsule ---- */
   .cap { position: absolute; left: 0; top: 0; width: 40px; height: 40px; z-index: 2; }
@@ -152,6 +153,7 @@
     <div class="tray"></div>
   </div>
   <div class="pull-btns"><button id="pull1" class="pull">Tirar ×1<small>Gratis</small></button><button id="pull10" class="pull ten">Tirar ×10<small>Gratis</small></button></div>
+  <p class="pity" id="pity"></p>
   <p class="rates" id="rates"></p>
 </section>
 <section id="coleccion" class="tab" hidden><p class="sub">Pasa el cursor (o el dedo) sobre una carta para inclinarla en 3D</p><main class="grid" id="grid"></main></section>
@@ -162,7 +164,7 @@
 // ---- Gacha rules (see docs/design/gacha.md) ----
 const RATES = { 'Común': 55, 'Raro': 30, 'Épico': 12, 'Legendario': 3 };
 const TEN_GUARANTEE = 'Raro'; // x10 all-Común -> 10th re-rolled on the Raro+ table
-const PITY = 50; // 50th pull without a Legendario is a Legendario
+const PITY = 80; // 80th pull without a Legendario is a Legendario
 const ORDER = ['Común', 'Raro', 'Épico', 'Legendario'];
 const COLOR = { 'Común': '#B8C2CC', 'Raro': '#4FA3F7', 'Épico': '#A65BF2', 'Legendario': '#F5B83D' };
 const STARS = r => '★'.repeat(ORDER.indexOf(r) + 1);
@@ -215,7 +217,9 @@ function tiltable(root) {
 }
 const capHTML = r => `<div class="cap" style="--c:${COLOR[r]}"><div class="cap-top"></div><div class="cap-bot"></div></div>`;
 
+const renderPity = () => $('pity').innerHTML = `Legendario garantizado en <b>${PITY - save.pity}</b> tiradas`;
 function renderCollection() {
+  renderPity();
   const grid = $('grid');
   grid.innerHTML = CATS.map(c => {
     const r = c.rarity.toLowerCase(), n = col[c.id] || 0;
