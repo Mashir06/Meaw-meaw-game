@@ -1,0 +1,17 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "dark-glow",
+        "value": "*",
+        "files": [
+          "index.html"
+        ],
+        "createdAt": "2026-11-05T18:58:08.825Z",
+        "reason": "Claude decided: rarity frame glow is specified by art-director in docs/art/cat-designs.md (Raro/Legendario)"
+      }
+    ]
+  }
+}

@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Meaw Meaw</title>
+<style>
+  :root { --bg: #1f1b2e; --card: #2c2642; --text: #f4f0ff; --muted: #b8b0d4;
+    --común: #B8C2CC; --raro: #4FA3F7; --épico: #A65BF2; --legendario: #F5B83D; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font-family: system-ui, sans-serif; }
+  h1 { text-align: center; margin: 24px 16px 4px; font-size: 2rem; }
+  p.sub { text-align: center; color: var(--muted); margin: 0 16px 20px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 18px; padding: 0 16px 32px; max-width: 1200px; margin: auto; }
+  .card { position: relative; background: var(--card); border: 4px solid var(--frame); border-radius: 18px; padding: 10px 10px 14px; overflow: hidden; }
+  .card h2 { margin: 6px 0 2px; font-size: 1.05rem; text-align: center; }
+  .card .rar { text-align: center; color: var(--frame); font-weight: 700; font-size: .85rem; }
+  .card .bio { color: var(--muted); font-size: .8rem; text-align: center; margin: 6px 4px 0; min-height: 2.4em; }
+  .card.raro { box-shadow: 0 0 14px #4FA3F780; }
+  .card.épico::after, .card.legendario::after { content: ""; position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(115deg, transparent 40%, #ffffff40 50%, transparent 60%) -200% 0 / 200% 100% no-repeat; animation: shine 4s infinite; }
+  .card.legendario { box-shadow: 0 0 22px #F5B83D90; }
+  @keyframes shine { 0%, 60% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+
+  /* pseudo-3D: each SVG layer floats at its own depth */
+  .cat { width: 86%; margin: 4px auto 0; aspect-ratio: 1; perspective: 600px; touch-action: none; }
+  .tilt { position: relative; width: 100%; height: 100%; transform-style: preserve-3d;
+    transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); transition: transform .15s ease-out; }
+  .stage { position: absolute; inset: 0; transform-style: preserve-3d; animation: sway 4s ease-in-out infinite; }
+  .layer { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+  .ground { transform: translateZ(-30px); } .back { transform: translateZ(-20px); } .body { transform: translateZ(0); }
+  .head { transform: translateZ(10px); } .face { transform: translateZ(16px); } .front { transform: translateZ(28px); }
+  .body { transform-origin: 50% 95%; animation: breathe 2.4s ease-in-out infinite; }
+  @keyframes sway { 0%, 100% { transform: rotateY(-8deg); } 50% { transform: rotateY(8deg); } }
+  @keyframes breathe { 0%, 100% { scale: 1 1; } 50% { scale: 1 1.03; } }
+  .anim-jelly .stage { animation: jelly 2.6s ease-in-out infinite; }
+  @keyframes jelly { 0%, 100% { transform: rotateY(-8deg) rotateZ(-3deg); } 50% { transform: rotateY(8deg) rotateZ(3deg); } }
+  .anim-boat .stage { animation: boat 3s ease-in-out infinite; }
+  @keyframes boat { 0%, 100% { transform: rotateZ(-5deg) rotateY(10deg); } 50% { transform: rotateZ(5deg) rotateY(-10deg); } }
+  .anim-zombie .stage { animation: zombie 3.5s ease-in-out infinite; }
+  @keyframes zombie { 0%, 30% { transform: rotateY(-5deg) rotateZ(0); } 55%, 80% { transform: rotateY(12deg) rotateZ(10deg); } 100% { transform: rotateY(-5deg) rotateZ(0); } }
+  .anim-float .stage { animation: sway 5s ease-in-out infinite, float 3.2s ease-in-out infinite; }
+  @keyframes float { 0%, 100% { translate: 0 -3%; } 50% { translate: 0 3%; } }
+
+  /* accessory animations (SVG groups) */
+  .wing-l, .flutter, .spin, .bob, .mash, .hat, .shield, .halo, .twinkle path, .sparkles path, .bubble, .puff, .glint { transform-box: fill-box; }
+  .wing-l { transform-origin: 100% 90%; animation: flap .8s ease-in-out infinite alternate; }
+  @keyframes flap { from { transform: rotateY(0) rotateZ(0); } to { transform: rotateY(50deg) rotateZ(-8deg); } }
+  .anim-float .wing-l { animation-duration: 1.6s; }
+  .flutter { transform-origin: 0% 50%; animation: flutter 1.4s ease-in-out infinite alternate; }
+  @keyframes flutter { from { transform: rotateY(-20deg) skewY(-3deg); } to { transform: rotateY(20deg) skewY(3deg); } }
+  .spin { transform-origin: 50% 50%; animation: spin 6s ease-in-out infinite; }
+  @keyframes spin { 0%, 85% { transform: rotate(0); } 100% { transform: rotate(360deg); } }
+  .bob { transform-origin: 50% 100%; animation: bob 1.3s ease-in-out .2s infinite alternate; }
+  @keyframes bob { to { transform: translateY(-5px) scaleY(1.1); } }
+  .blink { animation: blink 1s steps(2) infinite; }
+  @keyframes blink { 50% { opacity: .4; } }
+  .mash { transform-origin: 50% 50%; animation: mash .45s ease-in-out infinite alternate; }
+  @keyframes mash { from { transform: rotateY(-12deg) rotateZ(-3deg); } to { transform: rotateY(12deg) rotateZ(3deg); } }
+  .hat { transform-origin: 50% 100%; animation: hat 3s ease-in-out .9s infinite alternate; }
+  @keyframes hat { from { transform: rotateZ(-4deg); } to { transform: rotateZ(4deg); } }
+  .shield { transform-origin: 50% 50%; animation: shield 3s ease-in-out infinite; }
+  @keyframes shield { 0%, 40%, 100% { transform: rotateY(0); } 60%, 80% { transform: rotateY(-35deg) translateX(6px); } }
+  .halo { transform-origin: 50% 50%; animation: halo 2.4s ease-in-out infinite alternate; }
+  @keyframes halo { to { transform: translateY(-5px) scaleX(.92); } }
+  .twinkle path, .sparkles path { transform-origin: 50% 50%; animation: twinkle 1.6s ease-in-out infinite alternate; }
+  .twinkle path:nth-child(2), .sparkles path:nth-child(2) { animation-delay: .5s; } .sparkles path:nth-child(3) { animation-delay: 1s; }
+  @keyframes twinkle { from { transform: scale(.5) rotate(0); opacity: .4; } to { transform: scale(1.15) rotate(45deg); opacity: 1; } }
+  .glint { animation: glint 4s ease-in-out infinite alternate; }
+  @keyframes glint { to { transform: translate(10px, 4px); opacity: .5; } }
+  .bubble { animation: rise 2.4s ease-in infinite; } .b2 { animation-delay: .8s; } .b3 { animation-delay: 1.6s; }
+  @keyframes rise { from { transform: translateY(0) scale(.6); opacity: 0; } 20% { opacity: 1; } to { transform: translateY(-80px) scale(1.2); opacity: 0; } }
+  .puff { transform-origin: 0% 100%; animation: puff 5s ease-out infinite; }
+  @keyframes puff { 0%, 80% { transform: scale(0); opacity: 0; } 88% { transform: scale(1.1); opacity: 1; } 100% { transform: scale(1.4) translate(6px, -6px); opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; } }
+</style>
+</head>
+<body>
+<h1>🐾 Meaw Meaw</h1>
+<p class="sub">Colección de gatitos — pasa el cursor (o el dedo) sobre una carta para inclinarla en 3D</p>
+<main class="grid" id="grid"></main>
+<script src="cats.js"></script>
+<script>
+const grid = document.getElementById('grid');
+const LAYERS = ['back', 'body', 'head', 'face', 'front'];
+const svg = (cls, inner) => `<svg class="layer ${cls}" viewBox="0 0 256 256" aria-hidden="true">${inner}</svg>`;
+for (const c of CATS) {
+  const L = buildCat(c), r = c.rarity.toLowerCase();
+  const card = document.createElement('article');
+  card.className = `card ${r} anim-${c.anim}`;
+  card.style.setProperty('--frame', `var(--${r})`);
+  card.innerHTML = `<div class="cat" role="img" aria-label="${c.name}"><div class="tilt">${svg('ground', L.ground)}
+      <div class="stage">${LAYERS.map(k => svg(k, L[k])).join('')}</div></div></div>
+    <h2>${c.name}</h2><div class="rar">${'★'.repeat({ común: 1, raro: 2, épico: 3, legendario: 4 }[r])} ${c.rarity}</div><p class="bio">${c.bio}</p>`;
+  const cat = card.querySelector('.cat'), tilt = card.querySelector('.tilt');
+  cat.addEventListener('pointermove', e => {
+    const b = cat.getBoundingClientRect(), x = (e.clientX - b.left) / b.width - .5, y = (e.clientY - b.top) / b.height - .5;
+    tilt.style.setProperty('--ry', `${x * 30}deg`); tilt.style.setProperty('--rx', `${-y * 30}deg`);
+  });
+  cat.addEventListener('pointerleave', () => { tilt.style.setProperty('--ry', '0deg'); tilt.style.setProperty('--rx', '0deg'); });
+  grid.append(card);
+}
+</script>
+</body>
+</html>
