@@ -1,6 +1,6 @@
 // Meaw Meaw — cats (spec: docs/art/cat-designs.md, "Base v2 — fiel a la referencia").
 // Every cat = shared base silhouette + per-layer accessory SVG. Layers get stacked in 3D by index.html.
-const O = '#1A161F', GOLD = '#F5B82E', GOLD_SH = '#C9861C';
+const O = '#3B2F40', GOLD = '#F5B82E', GOLD_SH = '#C9861C';
 const st = (fill, w = 4) => `fill="${fill}" stroke="${O}" stroke-width="${w}" stroke-linejoin="round" stroke-linecap="round"`;
 const mirror = s => `<g transform="translate(256 0) scale(-1 1)">${s}</g>`;
 const both = s => s + mirror(s);
@@ -20,8 +20,8 @@ const EYES = [85, 171], EY = 92;
 function buildCat(c, uid = "") { // uid: unique suffix so the same cat can appear twice in one page (clipPath ids)
   const id = c.id + uid, p = c.colors, a = c.acc || {}, light = mix(p.fur, '#FFFFFF', .5);
   const bodyFill = c.bodyFill || p.fur, bodyShade = c.bodyShade || p.shade;
-  const ears = earR => `<path d="${EAR_L}" ${st(p.fur, 5)}/><path d="${EAR_L_IN}" fill="${p.ear}"/>` +
-    (earR ? `<path d="${earR}" ${st(p.fur, 5)}/>` : mirror(`<path d="${EAR_L}" ${st(p.fur, 5)}/><path d="${EAR_L_IN}" fill="${p.ear}"/>`));
+  const ears = earR => `<path d="${EAR_L}" ${st(p.fur, 4.5)}/><path d="${EAR_L_IN}" fill="${p.ear}"/>` +
+    (earR ? `<path d="${earR}" ${st(p.fur, 4.5)}/>` : mirror(`<path d="${EAR_L}" ${st(p.fur, 4.5)}/><path d="${EAR_L_IN}" fill="${p.ear}"/>`));
   const pattern = {
     stripes: `<g fill="${p.pattern}"><ellipse cx="111" cy="52" rx="5" ry="9" transform="rotate(-12 111 52)"/><ellipse cx="128" cy="48" rx="5" ry="10"/><ellipse cx="145" cy="52" rx="5" ry="9" transform="rotate(12 145 52)"/></g>
       <g fill="${light}"><ellipse cx="100" cy="68" rx="7" ry="5"/><ellipse cx="156" cy="68" rx="7" ry="5"/></g>`,
@@ -36,15 +36,16 @@ function buildCat(c, uid = "") { // uid: unique suffix so the same cat can appea
   const A = k => sh((c.shift || {})[k], a[k]) || a[k] || '';
   return {
     ground: `<path d="M48 240 C70 234 186 233 210 239 C214 246 180 250 128 250 C78 250 44 247 48 240 Z" fill="${O}" opacity=".3"/>` + A('ground'),
-    back: `<path d="${TAIL}" ${st(p.fur, 5)}/><g fill="${light}"><circle cx="17" cy="188" r="3"/><circle cx="25" cy="184" r="2.5"/><circle cx="13" cy="197" r="2"/></g>` + A('back'),
+    back: `<g class="s-tail"><path d="${TAIL}" ${st(p.fur, 4.5)}/><g fill="${light}"><circle cx="17" cy="188" r="3"/><circle cx="25" cy="184" r="2.5"/><circle cx="13" cy="197" r="2"/></g></g>` + A('back'),
     body: `<defs><clipPath id="${id}-bc"><path d="${BODY}"/></clipPath></defs>
       <path d="${BODY}" fill="${bodyFill}"/>
       <g clip-path="url(#${id}-bc)">
         ${c.bodyFill ? '' : `<path d="M76 140 C66 172 64 210 70 244 L198 244 C204 210 200 172 186 140 Z" fill="${p.belly}"/>`}
         <path d="M44 170 C56 184 60 214 50 234 C40 222 38 190 44 170 Z" fill="${bodyShade}"/>
+        <path d="M196 160 C210 180 212 206 204 226" stroke="#FFFFFF" stroke-width="6" fill="none" stroke-linecap="round" opacity=".25"/>
         <g fill="${bodyShade}" opacity=".4"><path d="M54 136 C90 152 170 154 204 134 C196 160 70 162 54 136 Z"/><path d="M40 226 C90 218 170 216 218 224 L218 246 L40 246 Z"/></g>
       </g>
-      <path d="${BODY}" fill="none" stroke="${O}" stroke-width="5" stroke-linejoin="round"/>
+      <path d="${BODY}" fill="none" stroke="${O}" stroke-width="4.5" stroke-linejoin="round"/>
       <g ${st('#F7E3DC')}><path d="M77 236 C77 229 86 227 94 229 C100 231 101 238 96 240 C89 242 79 242 77 236 Z"/><path d="M179 236 C179 229 170 227 162 229 C156 231 155 238 160 240 C167 242 177 242 179 236 Z"/></g>
       <path d="M84 232 q1 3 0 5 M91 231 q1 3 0 5 M165 231 q-1 3 0 5 M172 232 q-1 3 0 5" stroke="${O}" stroke-width="2" fill="none" stroke-linecap="round"/>
       <path d="M103 206 Q99 222 105 236 M124 214 Q126 226 123 238 M132 214 Q130 226 133 238 M153 206 Q157 222 151 236" stroke="${O}" stroke-width="4" fill="none" stroke-linecap="round"/>
@@ -57,10 +58,11 @@ function buildCat(c, uid = "") { // uid: unique suffix so the same cat can appea
       <path d="${HEAD}" fill="${p.fur}"/>
       <g clip-path="url(#${id}-hc)"><ellipse cx="54" cy="94" rx="16" ry="9" fill="${p.shade}"/><ellipse cx="202" cy="94" rx="16" ry="9" fill="${p.shade}"/>
         <path d="${MUZZLE}" fill="${p.belly}"/></g>
+      <path d="M60 70 C70 44 104 36 132 38 C100 46 76 60 66 84 Z" fill="#FFFFFF" opacity=".22"/><g fill="#FF9FB4" opacity=".28"><ellipse cx="66" cy="112" rx="13" ry="7"/><ellipse cx="190" cy="112" rx="13" ry="7"/></g>
       ${pattern}<g fill="${light}"><ellipse cx="76" cy="106" rx="10" ry="5"/><ellipse cx="180" cy="106" rx="10" ry="5"/></g>
-      <path d="${HEAD}" fill="none" stroke="${O}" stroke-width="5"/>` + A('head') + (c.earsOver ? ears(c.earR) : '') + A('headTop'),
+      <path d="${HEAD}" fill="none" stroke="${O}" stroke-width="4.5"/>` + A('head') + (c.earsOver ? ears(c.earR) : '') + A('headTop'),
     face: `<path d="M107 99 C107 110 125 111 128 101 C131 111 149 110 149 99" stroke="${O}" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>` +
-      A('face') + eye(EYES[0], c.eyeL) + eye(EYES[1], c.eyeR) + A('faceTop'),
+      A('face') + `<g class="eyes" style="animation-delay:-${(Math.random() * 5).toFixed(2)}s">${eye(EYES[0], c.eyeL) + eye(EYES[1], c.eyeR)}</g>` + A('faceTop'),
     front: A('front') + (c.rarity === 'Legendario' ? `<g class="sparkles">${star4(30, 40, 7, GOLD)}${star4(228, 70, 6, GOLD)}${star4(226, 200, 5, GOLD)}${star4(24, 140, 5, GOLD)}</g>` : ''),
   };
 }
@@ -378,7 +380,7 @@ function buildWalk(c, uid = '') {
     ${leg('w-fb', 208, 189, LEG_B, far)}${leg('w-ff', 134, 189, LEG_F, far)}
     <g class="w-body">
       <g transform="translate(92 84) scale(.62)">${A('back')}</g>
-      <g transform="translate(210 162)"><g class="w-tail"><g transform="translate(-210 -162)"><path d="${WTAIL}" ${st(p.fur, 5)}/>
+      <g transform="translate(210 162)"><g class="w-tail"><g transform="translate(-210 -162)"><path d="${WTAIL}" ${st(p.fur, 4.5)}/>
         <g fill="${light}"><path d="M193 95 c3 -2 6 0 5 3 c-1 3 -6 2 -5 -3z"/><path d="M201 89 c2 -2 5 -1 4 2 c-1 2 -4 2 -4 -2z"/></g></g></g></g>
       <path d="${TORSO}" fill="${near}"/>
       <g clip-path="url(#${id}-tc)">
@@ -387,7 +389,7 @@ function buildWalk(c, uid = '') {
         <path d="M108 186 C124 196 146 200 164 194 C162 206 132 212 110 204 Z" fill="${far}" opacity=".4"/>
         ${torsoItems ? `<g transform="translate(92 84) scale(.62)">${A('body')}${A('bodyTop')}</g>` : ''}
       </g>
-      <path d="${TORSO}" fill="none" stroke="${O}" stroke-width="5" stroke-linejoin="round"/>
+      <path d="${TORSO}" fill="none" stroke="${O}" stroke-width="4.5" stroke-linejoin="round"/>
     </g>
     ${leg('w-nb', 192, 191, LEG_B, near)}${leg('w-nf', 118, 191, LEG_F, near, true)}
     <g class="w-body">

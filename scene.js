@@ -1,7 +1,7 @@
 // Meaw Meaw — patio backdrop (original Japanese house yard), drawn into <svg id="scene" viewBox="0 0 1000 600">.
 // Item positions must match SPOTS in index.html: cushion (220,378), bowl (750,506), yarn (450,545), box (848,350).
 function drawScene() {
-  const O = '#1A161F';
+  const O = '#3B2F40';
   let seed = 11; const r = () => (seed = (seed * 9301 + 49297) % 233280) / 233280;
   const R = (a, b) => a + r() * (b - a);
   const f = n => n.toFixed(1);
