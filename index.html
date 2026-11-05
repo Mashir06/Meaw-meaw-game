@@ -13,6 +13,7 @@
   p.sub { text-align: center; color: var(--muted); margin: 0 16px 20px; }
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 18px; padding: 0 16px 32px; max-width: 1200px; margin: auto; }
   .card { position: relative; background: var(--card); border: 4px solid var(--frame); border-radius: 18px; padding: 10px 10px 14px; overflow: hidden; }
+  .cat { touch-action: pan-y; }
   .card h2 { margin: 6px 0 2px; font-size: 1.05rem; text-align: center; }
   .card .rar { text-align: center; color: var(--frame); font-weight: 700; font-size: .85rem; }
   .card .bio { color: var(--muted); font-size: .8rem; text-align: center; margin: 6px 4px 0; min-height: 2.4em; }
@@ -72,34 +73,237 @@
   @keyframes rise { from { transform: translateY(0) scale(.6); opacity: 0; } 20% { opacity: 1; } to { transform: translateY(-80px) scale(1.2); opacity: 0; } }
   .puff { transform-origin: 0% 100%; animation: puff 5s ease-out infinite; }
   @keyframes puff { 0%, 80% { transform: scale(0); opacity: 0; } 88% { transform: scale(1.1); opacity: 1; } 100% { transform: scale(1.4) translate(6px, -6px); opacity: 0; } }
+  /* ---- tabs ---- */
+  header { text-align: center; }
+  .tabs { display: inline-flex; gap: 6px; background: var(--card); padding: 5px; border-radius: 999px; margin: 8px 16px 18px; }
+  .tabs button { border: 0; background: transparent; color: var(--muted); font: 700 1rem system-ui, sans-serif; padding: 9px 20px; border-radius: 999px; cursor: pointer; }
+  .tabs button.on { background: #E84A5F; color: #fff; }
+  .tabs span { font-weight: 500; opacity: .85; font-size: .85rem; }
+  /* ---- machine ---- */
+  .tab[hidden] { display: none !important; }
+  #gacha { display: flex; flex-direction: column; align-items: center; padding: 0 16px 32px; }
+  .machine-wrap { position: relative; width: min(320px, 86vw); padding-bottom: 72px; }
+  .machine { display: block; width: 100%; overflow: visible; }
+  #crank, #domeCaps { transform-box: fill-box; transform-origin: 50% 50%; }
+  .tray { position: absolute; left: 4%; right: 4%; bottom: 0; height: 64px; background: #2c2642; border: 5px solid #1A161F; border-top: 0; border-radius: 0 0 48px 48px; box-shadow: inset 0 -10px 0 #241f36; }
+  .pull-btns { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; margin-top: 18px; }
+  .pull { border: 4px solid #1A161F; background: #F5B83D; color: #1A161F; font: 900 1.15rem system-ui, sans-serif; padding: 10px 26px; border-radius: 16px; cursor: pointer;
+    box-shadow: 0 6px 0 #1A161F; display: flex; flex-direction: column; align-items: center; line-height: 1.1; }
+  .pull small { font-size: .75rem; font-weight: 700; opacity: .75; }
+  .pull.ten { background: #E84A5F; color: #fff; }
+  .pull:active:not(:disabled) { transform: translateY(4px); box-shadow: 0 2px 0 #1A161F; }
+  .pull:disabled { filter: grayscale(.7) brightness(.7); cursor: default; }
+  .rates { color: var(--muted); font-size: .8rem; text-align: center; max-width: 520px; }
+  /* ---- capsule ---- */
+  .cap { position: absolute; left: 0; top: 0; width: 40px; height: 40px; z-index: 2; }
+  .cap-top, .cap-bot { position: absolute; left: 0; width: 100%; height: 50%; border: 3px solid #1A161F; transition: transform .5s cubic-bezier(.3, 1.4, .5, 1), opacity .5s; }
+  .cap-top { top: 0; border-radius: 999px 999px 0 0; border-bottom-width: 1.5px; background: radial-gradient(circle at 32% 40%, #ffffffb0 0 12%, transparent 13%), var(--c); }
+  .cap-bot { bottom: 0; border-radius: 0 0 999px 999px; border-top-width: 1.5px; background: #F7F4EE; }
+  /* ---- reveal ---- */
+  .reveal { position: fixed; inset: 0; z-index: 10; background: #120f1cf0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; padding: 16px; overflow: auto; }
+  .reveal[hidden] { display: none; }
+  .slots { display: grid; grid-template-columns: repeat(5, minmax(0, 150px)); gap: 12px; width: 100%; justify-content: center; }
+  .slots.one { grid-template-columns: minmax(0, 300px); }
+  @media (max-width: 700px) { .slots { grid-template-columns: repeat(2, minmax(0, 160px)); } }
+  .slot { position: relative; display: grid; place-items: center; }
+  .slot > .cap { position: absolute; left: 20%; top: 18%; width: 60%; height: auto; aspect-ratio: 1; animation: wobble .4s ease-in-out infinite alternate; }
+  .slot .cap-top, .slot .cap-bot { border-width: 5px; }
+  @keyframes wobble { from { transform: rotate(-8deg); } to { transform: rotate(8deg); } }
+  .slot .mini { width: 100%; opacity: 0; transform: scale(.2); transition: transform .5s cubic-bezier(.3, 1.6, .5, 1), opacity .3s; }
+  .slot.open .mini { opacity: 1; transform: none; }
+  .slot.open > .cap { animation: none; }
+  .slot.open .cap-top { transform: translateY(-140%) rotate(-50deg); opacity: 0; }
+  .slot.open .cap-bot { transform: translateY(80%) rotate(20deg); opacity: 0; }
+  .slot.épico::before, .slot.legendario::before { content: ""; position: absolute; inset: -12%; border-radius: 50%; opacity: 0; transition: opacity .6s;
+    background: repeating-conic-gradient(var(--ray) 0 10deg, transparent 10deg 30deg); mask: radial-gradient(circle, #000 30%, transparent 70%); animation: rays 8s linear infinite; }
+  .slot.épico { --ray: #A65BF270; } .slot.legendario { --ray: #F5B83D90; }
+  .slot.open::before { opacity: 1; }
+  @keyframes rays { to { rotate: 360deg; } }
+  .mini h3 { margin: 4px 0 0; font-size: .95rem; text-align: center; }
+  .mini .cat { width: 92%; }
+  .new { position: absolute; top: 6px; left: 6px; background: #E84A5F; color: #fff; font: 900 .7rem system-ui, sans-serif; padding: 3px 7px; border-radius: 8px; transform: rotate(-8deg); }
+  /* ---- collection ---- */
+  .card.locked .cat { filter: brightness(0) opacity(.45); }
+  .card.locked .rar { opacity: .5; }
+  .count { position: absolute; top: 8px; right: 10px; background: #1A161F; color: #fff; font: 800 .8rem system-ui, sans-serif; padding: 2px 8px; border-radius: 999px; }
   @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; } }
 </style>
 </head>
 <body>
-<h1>🐾 Meaw Meaw</h1>
-<p class="sub">Colección de gatitos — pasa el cursor (o el dedo) sobre una carta para inclinarla en 3D</p>
-<main class="grid" id="grid"></main>
+<header><h1>🐾 Meaw Meaw</h1>
+<nav class="tabs"><button data-tab="gacha" class="on">Gacha</button><button data-tab="coleccion">Colección <span id="owned"></span></button></nav></header>
+<section id="gacha" class="tab">
+  <div class="machine-wrap" id="wrap">
+    <svg class="machine" id="machine" viewBox="0 0 300 440" aria-label="Máquina gashapon">
+      <defs><clipPath id="domeClip"><circle cx="150" cy="140" r="102"/></clipPath></defs>
+      <rect x="118" y="20" width="64" height="22" rx="8" fill="#E84A5F" stroke="#1A161F" stroke-width="5"/>
+      <circle cx="150" cy="140" r="106" fill="#CFEFFF" fill-opacity=".22"/>
+      <g clip-path="url(#domeClip)"><g id="domeCaps"></g></g>
+      <circle cx="150" cy="140" r="106" fill="none" stroke="#1A161F" stroke-width="6"/>
+      <path d="M74 92 Q92 52 136 42" stroke="#fff" stroke-width="10" opacity=".7" fill="none" stroke-linecap="round"/>
+      <rect x="40" y="232" width="220" height="26" rx="12" fill="#C9354A" stroke="#1A161F" stroke-width="5"/>
+      <rect x="46" y="252" width="208" height="170" rx="22" fill="#E84A5F" stroke="#1A161F" stroke-width="5"/>
+      <path d="M212 258 h20 a16 16 0 0 1 16 16 v126 a16 16 0 0 1 -16 16 h-20z" fill="#C9354A"/>
+      <rect x="70" y="268" width="160" height="36" rx="10" fill="#FFF6EC" stroke="#1A161F" stroke-width="4"/>
+      <text x="150" y="293" text-anchor="middle" font-family="system-ui, sans-serif" font-weight="900" font-size="20" fill="#E84A5F">MEAW MEAW</text>
+      <g id="crank"><circle cx="108" cy="344" r="30" fill="#F5F0E8" stroke="#1A161F" stroke-width="5"/><rect x="101" y="318" width="14" height="52" rx="7" fill="#F5B83D" stroke="#1A161F" stroke-width="4"/></g>
+      <rect x="172" y="324" width="44" height="42" rx="9" fill="#C9354A" stroke="#1A161F" stroke-width="4"/><rect x="190" y="331" width="8" height="28" rx="3" fill="#1A161F"/>
+      <rect x="108" y="382" width="84" height="36" rx="15" fill="#1A161F"/><path d="M116 390 h68" stroke="#4A4058" stroke-width="4" stroke-linecap="round"/>
+    </svg>
+    <div class="tray"></div>
+  </div>
+  <div class="pull-btns"><button id="pull1" class="pull">Tirar ×1<small>Gratis</small></button><button id="pull10" class="pull ten">Tirar ×10<small>Gratis</small></button></div>
+  <p class="rates" id="rates"></p>
+</section>
+<section id="coleccion" class="tab" hidden><p class="sub">Pasa el cursor (o el dedo) sobre una carta para inclinarla en 3D</p><main class="grid" id="grid"></main></section>
+<div id="reveal" class="reveal" hidden><div class="slots" id="slots"></div><button id="revealBtn" class="pull">Saltar</button></div>
+
 <script src="cats.js"></script>
 <script>
-const grid = document.getElementById('grid');
+// ---- Gacha rules (see docs/design/gacha.md) ----
+const RATES = { 'Común': 55, 'Raro': 30, 'Épico': 12, 'Legendario': 3 };
+const TEN_GUARANTEE = 'Raro'; // x10 all-Común -> 10th re-rolled on the Raro+ table
+const PITY = 50; // 50th pull without a Legendario is a Legendario
+const ORDER = ['Común', 'Raro', 'Épico', 'Legendario'];
+const COLOR = { 'Común': '#B8C2CC', 'Raro': '#4FA3F7', 'Épico': '#A65BF2', 'Legendario': '#F5B83D' };
+const STARS = r => '★'.repeat(ORDER.indexOf(r) + 1);
+const pick = a => a[Math.floor(Math.random() * a.length)];
+const wait = ms => new Promise(r => setTimeout(r, ms));
+const $ = id => document.getElementById(id);
+
+function rollRarity(min = 0) {
+  const pool = ORDER.slice(min), total = pool.reduce((t, r) => t + RATES[r], 0);
+  let x = Math.random() * total;
+  for (const r of pool) if ((x -= RATES[r]) < 0) return r;
+  return pool[0];
+}
+function roll(n) {
+  const rs = [];
+  for (let i = 0; i < n; i++) {
+    let r = save.pity + 1 >= PITY ? 'Legendario' : rollRarity();
+    if (n === 10 && i === 9 && rs.every(x => x === 'Común') && r === 'Común') r = rollRarity(ORDER.indexOf(TEN_GUARANTEE));
+    save.pity = r === 'Legendario' ? 0 : save.pity + 1;
+    rs.push(r);
+  }
+  return rs.map(r => pick(CATS.filter(c => c.rarity === r)));
+}
+
+// ---- collection (per-browser; shortcut: localStorage, move to a server when accounts exist) ----
+const KEY = 'meawmeaw.gacha.v1';
+let save = { col: {}, pity: 0 };
+try { save = { ...save, ...JSON.parse(localStorage.getItem(KEY)) }; } catch {}
+const col = save.col;
+const persist = () => { try { localStorage.setItem(KEY, JSON.stringify(save)); } catch {} };
+
+// ---- rendering ----
+let uid = 0;
 const LAYERS = ['back', 'body', 'head', 'face', 'front'];
 const svg = (cls, inner) => `<svg class="layer ${cls}" viewBox="0 0 256 256" aria-hidden="true">${inner}</svg>`;
-for (const c of CATS) {
-  const L = buildCat(c), r = c.rarity.toLowerCase();
-  const card = document.createElement('article');
-  card.className = `card ${r} anim-${c.anim}`;
-  card.style.setProperty('--frame', `var(--${r})`);
-  card.innerHTML = `<div class="cat" role="img" aria-label="${c.name}"><div class="tilt">${svg('ground', L.ground)}
-      <div class="stage">${LAYERS.map(k => svg(k, L[k])).join('')}</div></div></div>
-    <h2>${c.name}</h2><div class="rar">${'★'.repeat({ común: 1, raro: 2, épico: 3, legendario: 4 }[r])} ${c.rarity}</div><p class="bio">${c.bio}</p>`;
-  const cat = card.querySelector('.cat'), tilt = card.querySelector('.tilt');
-  cat.addEventListener('pointermove', e => {
-    const b = cat.getBoundingClientRect(), x = (e.clientX - b.left) / b.width - .5, y = (e.clientY - b.top) / b.height - .5;
-    tilt.style.setProperty('--ry', `${x * 30}deg`); tilt.style.setProperty('--rx', `${-y * 30}deg`);
-  });
-  cat.addEventListener('pointerleave', () => { tilt.style.setProperty('--ry', '0deg'); tilt.style.setProperty('--rx', '0deg'); });
-  grid.append(card);
+function catHTML(c) {
+  const L = buildCat(c, '-' + uid++);
+  return `<div class="cat anim-${c.anim}" role="img" aria-label="${c.name}"><div class="tilt">${svg('ground', L.ground)}<div class="stage">${LAYERS.map(k => svg(k, L[k])).join('')}</div></div></div>`;
 }
+function tiltable(root) {
+  root.querySelectorAll('.cat').forEach(cat => {
+    const tilt = cat.firstElementChild;
+    cat.addEventListener('pointermove', e => {
+      const b = cat.getBoundingClientRect();
+      tilt.style.setProperty('--ry', `${((e.clientX - b.left) / b.width - .5) * 30}deg`);
+      tilt.style.setProperty('--rx', `${-((e.clientY - b.top) / b.height - .5) * 30}deg`);
+    });
+    cat.addEventListener('pointerleave', () => { tilt.style.setProperty('--ry', '0deg'); tilt.style.setProperty('--rx', '0deg'); });
+  });
+}
+const capHTML = r => `<div class="cap" style="--c:${COLOR[r]}"><div class="cap-top"></div><div class="cap-bot"></div></div>`;
+
+function renderCollection() {
+  const grid = $('grid');
+  grid.innerHTML = CATS.map(c => {
+    const r = c.rarity.toLowerCase(), n = col[c.id] || 0;
+    return `<article class="card ${r} ${n ? '' : 'locked'}" style="--frame:var(--${r})">${catHTML(c)}
+      <h2>${n ? c.name : '???'}</h2><div class="rar">${STARS(c.rarity)} ${c.rarity}</div>
+      <p class="bio">${n ? c.bio : 'Aún no lo tienes.'}</p>${n > 1 ? `<span class="count">×${n}</span>` : ''}</article>`;
+  }).join('');
+  tiltable(grid);
+  $('owned').textContent = `${CATS.filter(c => col[c.id]).length}/${CATS.length}`;
+}
+
+// ---- machine ----
+(function fillDome() {
+  let s = 7, rnd = () => (s = (s * 9301 + 49297) % 233280) / 233280; // deterministic pile
+  const caps = [];
+  for (let y = 226; y > 110; y -= 24) for (let x = 60 + (y % 48 ? 12 : 0); x < 250; x += 26) {
+    if (Math.hypot(x - 150, y - 140) > 88) continue;
+    const c = COLOR[ORDER[Math.min(3, Math.floor(rnd() * 4.4))]];
+    caps.push(`<g transform="translate(${x + rnd() * 6} ${y + rnd() * 6}) rotate(${rnd() * 360})"><path d="M-14 0a14 14 0 0 1 28 0z" fill="${c}"/><path d="M-14 0a14 14 0 0 0 28 0z" fill="#F7F4EE"/><circle r="14" fill="none" stroke="#1A161F" stroke-width="3"/></g>`);
+  }
+  $('domeCaps').innerHTML = caps.join('');
+})();
+
+function dropCapsule(cat, i, n) {
+  const wrap = $('wrap'), W = wrap.clientWidth, H = $('machine').clientHeight, size = 40;
+  const el = document.createElement('div');
+  el.innerHTML = capHTML(cat.rarity); const cap = el.firstElementChild; wrap.append(cap);
+  const sx = W * .5 - size / 2, sy = H * (401 / 440) - size / 2;
+  const row = n > 1 ? i % 2 : 0, tx = n > 1 ? W * (.12 + .76 * (i / (n - 1))) - size / 2 : sx, ty = H + 34 - size / 2 - row * 22;
+  const spin = (tx - sx) * 2;
+  cap.animate([
+    { transform: `translate(${sx}px,${sy}px) scale(.3)`, opacity: 0 },
+    { transform: `translate(${sx}px,${sy + 14}px) scale(1)`, opacity: 1, offset: .2 },
+    { transform: `translate(${tx}px,${ty}px) rotate(${spin}deg)`, offset: .65, easing: 'ease-out' },
+    { transform: `translate(${tx}px,${ty - 16}px) rotate(${spin * 1.1}deg)`, offset: .8, easing: 'ease-in' },
+    { transform: `translate(${tx}px,${ty}px) rotate(${spin * 1.15}deg)` },
+  ], { duration: 900, easing: 'ease-in', fill: 'forwards' });
+  return cap;
+}
+
+async function pull(n) {
+  document.querySelectorAll('.pull-btns .pull').forEach(b => b.disabled = true);
+  document.querySelectorAll('.wrap-cap, #wrap > .cap').forEach(c => c.remove());
+  const res = roll(n);
+  const news = res.map(c => { const isNew = !col[c.id]; col[c.id] = (col[c.id] || 0) + 1; return isNew; });
+  persist();
+  $('crank').animate([{ transform: 'rotate(0)' }, { transform: `rotate(${n > 1 ? 720 : 360}deg)` }], { duration: n > 1 ? 1100 : 700, easing: 'ease-in-out' });
+  $('machine').animate([0, -6, 6, -4, 4, 0].map(x => ({ transform: `translateX(${x}px) rotate(${x / 4}deg)` })), { duration: 450, delay: 250 });
+  $('domeCaps').animate([0, 8, -6, 4, 0].map(a => ({ transform: `rotate(${a}deg)` })), { duration: 600, delay: 200 });
+  await wait(n > 1 ? 800 : 600);
+  for (let i = 0; i < n; i++) { dropCapsule(res[i], i, n); await wait(n > 1 ? 170 : 0); }
+  await wait(1000);
+  const order = res.map((c, i) => i).sort((a, b) => ORDER.indexOf(res[a].rarity) - ORDER.indexOf(res[b].rarity));
+  await reveal(order.map(i => res[i]), order.map(i => news[i]));
+  document.querySelectorAll('#wrap > .cap').forEach(c => c.remove());
+  document.querySelectorAll('.pull-btns .pull').forEach(b => b.disabled = false);
+  renderCollection();
+}
+
+function reveal(res, news) {
+  return new Promise(done => {
+    const box = $('reveal'), slots = $('slots'), btn = $('revealBtn');
+    slots.className = 'slots' + (res.length === 1 ? ' one' : '');
+    slots.innerHTML = res.map((c, i) => `<div class="slot ${c.rarity.toLowerCase()}">${capHTML(c.rarity)}
+      <div class="card mini ${c.rarity.toLowerCase()}" style="--frame:var(--${c.rarity.toLowerCase()})">${catHTML(c)}
+        <h3>${c.name}</h3><div class="rar">${STARS(c.rarity)} ${c.rarity}</div>${res.length === 1 ? `<p class="bio">${c.bio}</p>` : ''}${news[i] ? '<span class="new">¡NUEVO!</span>' : ''}</div></div>`).join('');
+    tiltable(slots);
+    box.hidden = false; btn.textContent = 'Saltar';
+    const all = [...slots.children], timers = all.map((s, i) => setTimeout(() => s.classList.add('open'), 700 + i * 260));
+    const finish = () => { timers.forEach(clearTimeout); all.forEach(s => s.classList.add('open')); btn.textContent = 'Continuar'; };
+    const doneT = setTimeout(finish, 700 + all.length * 260 + 400);
+    btn.onclick = () => {
+      if (btn.textContent === 'Saltar') { clearTimeout(doneT); return finish(); }
+      box.hidden = true; slots.innerHTML = ''; done();
+    };
+  });
+}
+
+// ---- wiring ----
+$('pull1').onclick = () => pull(1);
+$('pull10').onclick = () => pull(10);
+$('rates').textContent = 'Probabilidades: ' + ORDER.map(r => `${r} ${RATES[r]}%`).join(' · ') + ` — la tirada ×10 garantiza al menos un ${TEN_GUARANTEE} o mejor; a las ${PITY} tiradas sin Legendario, el siguiente es Legendario.`;
+document.querySelectorAll('.tabs button').forEach(b => b.onclick = () => {
+  document.querySelectorAll('.tabs button').forEach(x => x.classList.toggle('on', x === b));
+  document.querySelectorAll('.tab').forEach(t => t.hidden = t.id !== b.dataset.tab);
+});
+renderCollection();
 </script>
 </body>
 </html>

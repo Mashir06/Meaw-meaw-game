@@ -17,8 +17,8 @@ const BODY = 'M70 132 C42 156 32 200 40 226 C46 240 60 242 76 242 L180 242 C196 
 const TAIL = 'M52 228 C30 232 10 220 8 200 C6 184 18 176 28 180 C38 184 36 198 48 206 Z';
 const EYES = [85, 171], EY = 92;
 
-function buildCat(c) {
-  const id = c.id, p = c.colors, a = c.acc || {}, light = mix(p.fur, '#FFFFFF', .5);
+function buildCat(c, uid = "") { // uid: unique suffix so the same cat can appear twice in one page (clipPath ids)
+  const id = c.id + uid, p = c.colors, a = c.acc || {}, light = mix(p.fur, '#FFFFFF', .5);
   const bodyFill = c.bodyFill || p.fur, bodyShade = c.bodyShade || p.shade;
   const ears = earR => `<path d="${EAR_L}" ${st(p.fur, 5)}/><path d="${EAR_L_IN}" fill="${p.ear}"/>` +
     (earR ? `<path d="${earR}" ${st(p.fur, 5)}/>` : mirror(`<path d="${EAR_L}" ${st(p.fur, 5)}/><path d="${EAR_L_IN}" fill="${p.ear}"/>`));
