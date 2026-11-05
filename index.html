@@ -147,10 +147,10 @@
   .pet.walk .w-leg { animation: w-leg var(--stride, .8s) linear infinite; }
   .pet.walk .w-ff, .pet.walk .w-nb { animation-delay: calc(var(--stride, .8s) / -2); }
   .pet.walk .w-nb, .pet.walk .w-fb { animation-name: w-leg-back; }
-  @keyframes w-leg { 0%, 100% { transform: rotate(20deg); } 12.5% { transform: rotate(14deg); } 25% { transform: rotate(0); } 37.5% { transform: rotate(-14deg); }
-    50% { transform: rotate(-20deg); } 62.5% { transform: translateY(-3.5px) rotate(-14deg); } 75% { transform: translateY(-5px) rotate(0); } 87.5% { transform: translateY(-3.5px) rotate(14deg); } }
-  @keyframes w-leg-back { 0%, 100% { transform: rotate(16deg); } 12.5% { transform: rotate(11deg); } 25% { transform: rotate(0); } 37.5% { transform: rotate(-11deg); }
-    50% { transform: rotate(-16deg); } 62.5% { transform: translateY(-3px) rotate(-11deg); } 75% { transform: translateY(-4px) rotate(0); } 87.5% { transform: translateY(-3px) rotate(11deg); } }
+  @keyframes w-leg { 0%, 100% { transform: rotate(-10deg); } 25% { transform: rotate(0); } 50% { transform: rotate(10deg); }
+    62.5% { transform: translateY(-6px) rotate(14deg); } 75% { transform: translateY(-8px) rotate(4deg); } 87.5% { transform: translateY(-4px) rotate(-12deg); } }
+  @keyframes w-leg-back { 0%, 100% { transform: rotate(-8deg); } 25% { transform: rotate(0); } 50% { transform: rotate(8deg); }
+    62.5% { transform: translateY(-5px) rotate(12deg); } 75% { transform: translateY(-7px) rotate(3deg); } 87.5% { transform: translateY(-3px) rotate(-10deg); } }
   .pet.walk .w-body { animation: w-bob calc(var(--stride, .8s) / 2) ease-in-out infinite alternate; }
   @keyframes w-bob { to { transform: translateY(-3px); } }
   .pet.walk .w-head { animation: w-nod var(--stride, .8s) ease-in-out -.1s infinite; }
@@ -474,7 +474,7 @@ function tick(now) {
       }
       // pseudo-3D: walking cats turn toward where they go; resting cats face the player
       p.el.querySelector('.tilt').style.setProperty('--ry', `${p.state === 'interact' ? p.dir * 32 : 0}deg`);
-      p.wp.style.transform = p.dir > 0 ? 'scaleX(-1)' : ''; // walking art faces left
+      p.wp.style.transform = p.dir < 0 ? 'scaleX(-1)' : ''; // walking art faces right
       p.el.style.setProperty('--stride', `${Math.min(1.1, Math.max(.22, .056 / Math.max(.02, Math.hypot(p.vx, p.vy))))}s`);
       p.el.style.setProperty('--dir', p.dir);
       const s = .6 + .55 * (p.y - Y0) / (Y1 - Y0), size = W * .11;

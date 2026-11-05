@@ -362,46 +362,44 @@ const CATS = [
     } },
 ];
 
-// Walking pose (crouched chibi trot, facing left): big v2 head low at the front, short round body behind it,
-// stubby legs with mitten paws, thick raised tail. Held items, neck items and ground props are hidden.
-const LEG_B = 'M-16 -10 C-20 4 -17 13 -12 18 C-19 20 -22 28 -16 31 C-7 35 10 35 13 30 C15 26 13 21 10 18 C16 10 19 0 16 -10';
-const TORSO = 'M118 170 C128 150 158 138 186 140 C210 142 220 160 218 184 C216 206 204 224 182 228 C158 232 130 232 114 222 C102 212 106 186 118 170 Z';
-const WTAIL = 'M198 168 C214 148 218 116 210 96 C204 80 190 74 178 80 C168 86 172 100 182 97 C190 94 196 102 196 114 C196 134 188 152 180 162 Z';
+// Walking pose (3/4 front view, standing, walking to the RIGHT): big v2 head on top, small round body,
+// four short column legs stepping in diagonal pairs, tail curled up behind. Held items and ground props are hidden.
+const WLEG = 'M-12 -8 C-12 6 -12 17 -12 22 C-13 29 -6 31 2 31 C10 31 14 28 12 22 C12 15 12 4 12 -8';
+const TORSO = 'M70 132 C92 116 152 116 178 134 C198 148 198 186 184 200 C166 214 96 216 76 206 C56 194 52 146 70 132 Z';
+const WTAIL = 'M70 172 C44 166 32 142 38 118 C42 102 54 98 62 106';
+const HEADX = 'translate(34 26) scale(.8)'; // v2 head/neck space -> walking pose (chin at 136,140)
 const TORSO_ITEMS = new Set(['gato-sushi', 'gato-zombi', 'gato-astronauta', 'gato-dragon', 'gato-bombero', 'gato-detective', 'gato-calabaza', 'gato-robot', 'gato-rayo', 'gato-caballero']);
 function buildWalk(c, uid = '') {
   const L = buildCat(c, uid), id = c.id + uid, p = c.colors, a = c.acc || {}, light = mix(p.fur, '#FFFFFF', .5);
   const A = k => sh((c.shift || {})[k], a[k]) || a[k] || '';
   const near = c.bodyFill || p.fur, far = c.bodyShade || p.shade;
-  const leg = (cls, x, y, d, fill, back) => { const ty = back ? 29 : 26, lx = back ? -9 : -12;
-    return `<g transform="translate(${x} ${y})"><g class="w-leg ${cls}"><path d="${d}Z" ${st(fill, 4)}/>
-      <path d="M${lx - 3} ${ty - 2} q5 -4 11 -2" stroke="#FFFFFF" stroke-width="2.5" fill="none" stroke-linecap="round" opacity=".45"/>
-      <path d="M${lx} ${ty} q1.5 3 0 5.5 M${lx + 7} ${ty} q1.5 3 0 5.5" stroke="${O}" stroke-width="2.2" fill="none" stroke-linecap="round"/></g></g>`; };
-  const paw = (cls, x, y, fill, rot) => `<g transform="translate(${x} ${y})"><g class="w-leg ${cls}"><g transform="rotate(${rot} 0 17)">
-      <path d="M-12 18 C-13 10 -6 5 0 5 C7 5 13 10 12 18 C12 24 6 28 0 28 C-6 28 -12 24 -12 18 Z" ${st(fill, 4)}/>
-      <path d="M-8 24.5 q8 4 16 0" stroke="#F6C9C0" stroke-width="2.6" fill="none" stroke-linecap="round"/>
-      <path d="M-4 6.5 q1 3 0 6 M4 6.5 q-1 3 0 6" stroke="${O}" stroke-width="2.4" fill="none" stroke-linecap="round"/>
-      <path d="M-9 13 q2 -4 6 -5" stroke="#FFFFFF" stroke-width="2.4" fill="none" stroke-linecap="round" opacity=".5"/></g></g></g>`;
+  // legs sit behind the body: only the part below the belly shows, so there is no seam
+  const leg = (cls, x, y, fill) => `<g transform="translate(${x} ${y})"><g class="w-leg ${cls}"><path d="${WLEG}Z" fill="${fill}"/>
+      <path d="${WLEG}" fill="none" stroke="${O}" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M-6 27 q6 2.5 12 0" stroke="#F6C9C0" stroke-width="2.4" fill="none" stroke-linecap="round" opacity=".9"/></g></g>`;
+  const torsoItems = TORSO_ITEMS.has(c.id);
   return `<defs><clipPath id="${id}-tc"><path d="${TORSO}"/></clipPath></defs>
-    <g transform="translate(130 240)"><g class="w-shadow"><path transform="translate(-130 -240)" d="M44 240 C74 233 190 231 222 238 C226 245 192 249 130 249 C74 249 40 247 44 240 Z" fill="${O}" opacity=".25"/></g></g>
-    ${leg('w-fb', 200, 206, LEG_B, far, 1)}${leg('w-nb', 184, 207, LEG_B, near, 1)}
+    <g transform="translate(126 240)"><g class="w-shadow"><ellipse cx="0" cy="0" rx="74" ry="8" fill="${O}" opacity=".22"/></g></g>
+    ${leg('w-fb', 76, 206, far)}${leg('w-ff', 136, 207, far)}${leg('w-nb', 96, 208, near)}${leg('w-nf', 160, 208, near)}
     <g class="w-body">
-      <g transform="translate(95 80) scale(.55)">${A('back')}</g>
-      <g transform="translate(194 162)"><g class="w-tail"><g transform="translate(-194 -162)"><path d="${WTAIL}" ${st(p.fur, 4.5)}/>
-        <g fill="${light}"><path d="M185 88 c3 -2 6 0 5 3 c-1 3 -6 2 -5 -3z"/><path d="M194 86 c2 -2 5 -1 4 2 c-1 2 -4 2 -4 -2z"/></g></g></g></g>
+      <g transform="translate(49 52) scale(.6)">${A('back')}</g>
+      <g transform="translate(68 170)"><g class="w-tail"><g transform="translate(-68 -170)">
+        <path d="${WTAIL}" stroke="${O}" stroke-width="19" fill="none" stroke-linecap="round"/><path d="${WTAIL}" stroke="${p.fur}" stroke-width="10.5" fill="none" stroke-linecap="round"/>
+        <g fill="${light}"><circle cx="58" cy="105" r="2.6"/><circle cx="51" cy="104" r="2"/></g></g></g></g>
       <path d="${TORSO}" fill="${near}"/>
       <g clip-path="url(#${id}-tc)">
-        ${c.bodyFill ? '' : `<path d="M104 204 C130 214 170 216 226 206 L226 236 L104 236 Z" fill="${p.belly}"/>`}
-        <path d="M196 146 C222 156 230 186 212 216 C224 188 218 164 196 146 Z" fill="${far}"/>
-        ${TORSO_ITEMS.has(c.id) ? `<g transform="translate(95 80) scale(.55)">${A('body')}${A('bodyTop')}</g>` : ''}
+        ${c.bodyFill ? '' : `<path d="M118 150 C156 146 196 166 200 210 L110 220 C104 196 106 168 118 150 Z" fill="${p.belly}"/>`}
+        <path d="M60 140 C70 170 78 196 100 214 L48 214 Z" fill="${far}"/>
+        <path d="M150 128 C176 132 192 150 196 170" stroke="#FFFFFF" stroke-width="5" fill="none" stroke-linecap="round" opacity=".2"/>
+        ${torsoItems ? `<g transform="translate(49 52) scale(.6)">${A('body')}${A('bodyTop')}</g>` : ''}
       </g>
-      <path d="M200 174 C184 180 176 200 180 224" stroke="${O}" stroke-width="3.5" fill="none" stroke-linecap="round"/><path d="M196 182 C186 190 183 204 185 214" stroke="#FFFFFF" stroke-width="3" fill="none" stroke-linecap="round" opacity=".3"/>
       <path d="${TORSO}" fill="none" stroke="${O}" stroke-width="4.5" stroke-linejoin="round"/>
     </g>
     <g class="w-body">
-      ${c.collar === false ? '' : bell(124, 226, 8)}
-      <g transform="translate(98 222)"><g class="w-head"><g transform="translate(-100 -122) scale(.78 .86)">${L.head}${L.face}</g></g></g>
-    </g>
-    ${paw('w-ff', 136, 210, far, -10)}${paw('w-nf', 64, 208, near, 14)}`;
+      <g transform="${HEADX}">${torsoItems ? '' : A('body') + A('bodyTop')}
+        ${c.collar === false ? '' : `<path d="M68 140 Q128 166 188 140" stroke="${O}" stroke-width="12" fill="none" stroke-linecap="round"/><path d="M68 140 Q128 166 188 140" stroke="${p.accent}" stroke-width="6" fill="none" stroke-linecap="round"/>${bell(128, 168, 13)}`}</g>
+      <g transform="translate(136 140)"><g class="w-head"><g transform="translate(-102 -114) scale(.8)">${L.head}${L.face}</g></g></g>
+    </g>`;
 }
 
 if (typeof module !== 'undefined') module.exports = { CATS, buildCat, buildWalk };
